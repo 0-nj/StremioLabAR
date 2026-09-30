@@ -1,0 +1,1762 @@
+{
+  "metadata": {
+    "id": "aioar.complete",
+    "name": "StremioLabAR",
+    "description": "قالب عربي متكامل لـ AIOStreams",
+    "source": "external",
+    "author": "D",
+    "version": "1.1.0",
+    "category": "AIO",
+    "tags": [
+      "debrid",
+      "usenet",
+      "p2p",
+      "http",
+      "arabic"
+    ],
+    "serviceRequired": false,
+    "setToSaveInstallMenu": true,
+    "changelogUrl": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/CHANGELOG.md",
+    "inputs": [
+      {
+        "__if": "services",
+        "id": "header.mode.debrid",
+        "name": "وضع الديبرد واليوزنت",
+        "description": "تم اختيار إحدى الخدمات، لذلك سيتم استعمال قالب الاشتراكات",
+        "type": "alert",
+        "intent": "success"
+      },
+      {
+        "__if": "!services",
+        "id": "header.mode.p2p",
+        "name": "وضع التورنت والروابط المباشرة",
+        "description": "لم يتم اختيار أي خدمة، لذلك سيتم استخدام القالب المجاني",
+        "type": "alert",
+        "intent": "warning"
+      },
+      {
+        "id": "header.options",
+        "name": "خيارات القالب",
+        "description": "اختر طريقة عرض النتائج والإضافات والترتيب والسرعة المناسبة لك",
+        "type": "alert",
+        "intent": "info"
+      },
+      {
+        "id": "formatterChoice",
+        "name": "فورماتر عرض النتائج",
+        "description": "اختر فورماتر تامتارو أو جيليفين أو العربي، أو احتفظ بالفورماتر الحالي",
+        "type": "select",
+        "required": true,
+        "default": "tamtaro",
+        "options": [
+          {
+            "value": "tamtaro",
+            "label": "تامتارو"
+          },
+          {
+            "value": "jellyfin",
+            "label": "جيليفين"
+          },
+          {
+            "value": "arabic",
+            "label": "العربي"
+          },
+          {
+            "value": "retain",
+            "label": "استخدام الفورماتر الحالي"
+          }
+        ]
+      },
+      {
+        "id": "addonPreset",
+        "name": "إعداد الإضافات",
+        "description": "الإعداد الموصى به يثبت إضافات القالب، اختر استخدام إضافاتك الحالية إذا كنت قد خصصتها ولا تريد استبدالها",
+        "type": "select",
+        "required": true,
+        "default": "default",
+        "options": [
+          {
+            "value": "default",
+            "label": "الإضافات الموصى بها"
+          },
+          {
+            "value": "none",
+            "label": "استخدام إضافاتي الحالية"
+          }
+        ]
+      },
+      {
+        "id": "subtitleAddons",
+        "name": "إضافات الترجمة",
+        "description": "اختر نعم لإضافة أوبن سبتايتلز وسب دل وسب سورس، أو لا لعدم تحميل إضافات الترجمة",
+        "type": "select",
+        "required": true,
+        "default": "yes",
+        "options": [
+          {
+            "value": "yes",
+            "label": "نعم"
+          },
+          {
+            "value": "no",
+            "label": "لا"
+          }
+        ]
+      },
+      {
+        "__if": "services and inputs.addonPreset == default",
+        "id": "penguPlayUrl",
+        "name": "أضف إضافة بينقو بلاي (اختياري)",
+        "description": "أضف إضافة [بينقو بلاي](https://pengu.uk) للاحتياط عند تعطل خدمة الديبرد، واترك الحقل فارغًا إذا كنت لا تريد إضافتها",
+        "type": "url",
+        "required": false
+      },
+      {
+        "__if": "!services and inputs.addonPreset == default",
+        "id": "penguPlayUrlNoDebrid",
+        "name": "أضف إضافة بينقو بلاي (إجباري)",
+        "description": "لعدم توفر اشتراك ديبرد، يجب عليك تحميل إضافة [بينقو بلاي](https://pengu.uk)",
+        "type": "url",
+        "required": true
+      },
+      {
+        "__if": "services.torbox",
+        "id": "torboxTier",
+        "name": "فئة اشتراك توربوكس",
+        "description": "يضع حدًا لحجم التنزيلات غير المخزنة وفق فئة اشتراكك",
+        "type": "select",
+        "required": true,
+        "default": "nonPro",
+        "options": [
+          {
+            "value": "nonPro",
+            "label": "إسينشل أو ستاندر (٢٠٠ غيغابايت)"
+          },
+          {
+            "value": "pro",
+            "label": "برو (١ تيرابايت)"
+          }
+        ]
+      },
+      {
+        "id": "coreFilter",
+        "name": "محرك البحث: عدد النتائج",
+        "description": "القيمة الافتراضية هي ٣، وتعطي تقريبًا من ٣ إلى ٥ نتائج لكل دقة وجودة، أي ما يقارب ١٥ إلى ٢٠ مصدرًا إجمالًا، أدخل صفر لتعطيله",
+        "type": "number",
+        "required": true,
+        "default": 3
+      },
+      {
+        "id": "sortingOrder",
+        "name": "أولوية ترتيب النتائج",
+        "description": "اختر أولوية ترتيب النتائج. الدقة أولًا: تظهر نتائج الفوركي دائمًا في الأعلى. الجودة أولًا: تظهر نتائج الريمكس دائمًا في الأعلى، لذلك قد يظهر ريمكس بدقة ١٠٨٠ فوق ويب ديل بدقة فوركي. الترجمة أولًا: تظهر الملفات التي تتضمن ترجمة عربية مدمجة في الأعلى.",
+        "type": "select",
+        "required": true,
+        "default": "quality",
+        "options": [
+          {
+            "value": "quality",
+            "label": "الجودة أولًا"
+          },
+          {
+            "value": "resolution",
+            "label": "الدقة أولًا"
+          },
+          {
+            "value": "subtitle",
+            "label": "الترجمة أولًا"
+          }
+        ]
+      },
+      {
+        "id": "exitCondition",
+        "name": "سرعة البحث عن النتائج",
+        "description": "اختر بين الوضع الافتراضي والوضع السريع. الوضع الافتراضي يتيح مدة انتظار تصل إلى ٥ ثواني للحصول على نتائج أكثر واكتمالًا. أما الوضع السريع فيخفض الحد الأقصى للانتظار إلى ٣.٥ ثواني، مع احتمال بسيط لفقدان بعض النتائج الجيدة.",
+        "type": "select",
+        "required": true,
+        "default": "default",
+        "options": [
+          {
+            "value": "default",
+            "label": "الافتراضي: حد أقصى ٥ ثواني لضمان أفضل النتائج"
+          },
+          {
+            "value": "fast",
+            "label": "السريع: حد أقصى ٣.٥ ثواني مع مخاطرة بسيطة في عدد وجودة النتائج"
+          }
+        ]
+      }
+    ]
+  },
+  "config": {
+    "preferredQualities": [
+      "BluRay REMUX",
+      "BluRay",
+      "WEB-DL",
+      "WEBRip",
+      "HDRip",
+      "HC HD-Rip",
+      "HDTV",
+      "DVD REMUX",
+      "DVDRip",
+      "SCR",
+      "TC",
+      "TS",
+      "CAM",
+      "Unknown"
+    ],
+    "preferredResolutions": [
+      "2160p",
+      "1440p",
+      "1080p",
+      "720p",
+      "576p",
+      "480p",
+      "360p",
+      "240p",
+      "144p",
+      "Unknown"
+    ],
+    "excludedQualities": [],
+    "excludedVisualTags": [
+      "3D",
+      "H-OU",
+      "H-SBS"
+    ],
+    "posterService": "rpdb",
+    "deduplicator": {
+      "enabled": true,
+      "excludeAddons": [],
+      "multiGroupBehaviour": "aggressive",
+      "keys": [
+        "filename",
+        "infoHash",
+        "smartDetect"
+      ],
+      "cached": "single_result",
+      "uncached": "single_result",
+      "p2p": "single_result",
+      "http": "per_addon",
+      "smartDetectAttributes": [
+        "size",
+        "resolution",
+        "quality",
+        "visualTags",
+        "audioTags",
+        "audioChannels",
+        "languages",
+        "encode",
+        "edition",
+        "network",
+        "remastered",
+        "bitrate",
+        "releaseGroup"
+      ],
+      "smartDetectRounding": 10,
+      "libraryBehaviour": "prefer",
+      "merge": {
+        "enabled": true,
+        "failoverVariants": true,
+        "fields": [
+          "sizes",
+          "seadex",
+          "library",
+          "subtitles",
+          "languages"
+        ]
+      }
+    },
+    "autoPlay": {
+      "attributes": [
+        "resolution",
+        "quality",
+        "releaseGroup"
+      ]
+    },
+    "cacheAndPlay": {
+      "enabled": true,
+      "streamTypes": [
+        "usenet"
+      ]
+    },
+    "statistics": {
+      "enabled": false,
+      "position": "bottom",
+      "statsToShow": [
+        "addon",
+        "filter",
+        "timing"
+      ],
+      "showFilterStatsOnNoStreams": false
+    },
+    "digitalReleaseFilter": {
+      "enabled": false,
+      "tolerance": 1,
+      "requestTypes": [
+        "movie",
+        "series",
+        "anime"
+      ],
+      "addons": []
+    },
+    "ageRangeTypes": [],
+    "seasonEpisodeMatching": {
+      "enabled": true,
+      "strict": true,
+      "requestTypes": [
+        "movie",
+        "series",
+        "anime"
+      ],
+      "addons": []
+    },
+    "episodeTitleMatching": {
+      "enabled": false,
+      "similarityThreshold": 0.85,
+      "requestTypes": [
+        "movie",
+        "series",
+        "anime"
+      ],
+      "addons": []
+    },
+    "languageInference": {
+      "sources": []
+    },
+    "yearMatching": {
+      "enabled": true,
+      "tolerance": 1,
+      "strict": true,
+      "strictTypes": [
+        "movie"
+      ],
+      "useInitialAirDate": true,
+      "requestTypes": [
+        "movie",
+        "series",
+        "anime"
+      ],
+      "addons": []
+    },
+    "titleMatching": {
+      "mode": "exact",
+      "similarityThreshold": 1,
+      "enabled": true,
+      "ambiguousResults": "discard",
+      "requestTypes": [
+        "movie",
+        "series",
+        "anime"
+      ],
+      "addons": []
+    },
+    "precacheNextEpisode": false,
+    "precacheSingleStream": true,
+    "precacheSelector": "count(cached(streams)) == 0 ? uncached(streams) : []",
+    "enableSeadex": true,
+    "regexOverrides": [],
+    "checkOwned": true,
+    "proxy": {
+      "id": "builtin",
+      "proxiedAddons": [],
+      "proxiedServices": []
+    },
+    "tmdbAccessToken": "<template_placeholder>",
+    "excludeUncachedFromAddons": [],
+    "excludeUncachedFromServices": [],
+    "excludeUncachedFromStreamTypes": [],
+    "excludeCachedFromAddons": [],
+    "excludeCachedFromServices": [],
+    "excludeCachedFromStreamTypes": [],
+    "preferredEncodes": [
+      "AV1",
+      "HEVC",
+      "AVC",
+      "VC-1",
+      "Unknown",
+      "XviD",
+      "DivX"
+    ],
+    "preferredStreamTypes": [],
+    "preferredVisualTags": [
+      "HDR+DV",
+      "DV",
+      "HDR10+",
+      "HDR10",
+      "HDR",
+      "HLG",
+      "10bit",
+      "SDR",
+      "IMAX",
+      "Upscaled",
+      "AI"
+    ],
+    "preferredAudioTags": [
+      "Atmos",
+      "DTS:X",
+      "TrueHD",
+      "DTS-HD MA",
+      "FLAC",
+      "DTS-HD",
+      "DTS-ES",
+      "DTS",
+      "DD+",
+      "DD",
+      "OPUS",
+      "AAC"
+    ],
+    "addonName": "StremioLabAR",
+    "addonDescription": {
+      "__switch": "services",
+      "cases": {
+        "": "تم تعديل قالب تمتارو وتحسينه ليتناسب مع المصادر العربية، عن طريق تمرير المصادر التي تحتوي على صوت عربي أو ترجمة عربية عند توفرها، مع تحسين التصفية، وترتيب الأولويات، وآلية الانتقال إلى الخيارات البديلة عند الحاجة."
+      },
+      "default": "تم تعديل إعدادات تمتارو وتحسينها خصيصًا لتناسب البثوث العربية، سواء من ناحية الصوت أو الترجمة، مع تحسين التصفية، وترتيب الأولويات، وآلية الانتقال إلى الخيارات البديلة عند الحاجة."
+    },
+    "addonLogo": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/StremioLabAR.jpg",
+    "excludedResolutions": [],
+    "includedResolutions": [],
+    "requiredResolutions": [],
+    "includedQualities": [],
+    "requiredQualities": [],
+    "excludedLanguages": [],
+    "includedLanguages": [],
+    "requiredLanguages": [
+      "Original",
+      "Dual Audio",
+      "Multi",
+      "Dubbed",
+      "Unknown"
+    ],
+    "preferredLanguages": [
+      "Original",
+      "Dual Audio",
+      "Multi",
+      "Dubbed",
+      "Unknown"
+    ],
+    "requiredSubtitles": [],
+    "excludedSubtitles": [],
+    "includedSubtitles": [],
+    "preferredSubtitles": {
+      "__switch": "services",
+      "cases": {
+        "": []
+      },
+      "default": [
+        "Arabic"
+      ]
+    },
+    "includedVisualTags": [],
+    "requiredVisualTags": [],
+    "excludedAudioTags": [],
+    "includedAudioTags": [],
+    "requiredAudioTags": [],
+    "excludedAudioChannels": [],
+    "includedAudioChannels": [],
+    "requiredAudioChannels": [],
+    "preferredAudioChannels": [],
+    "excludedStreamTypes": [],
+    "includedStreamTypes": [],
+    "requiredStreamTypes": [],
+    "excludedEncodes": [],
+    "includedEncodes": [],
+    "requiredEncodes": [],
+    "excludedRegexPatterns": [
+      "<SYNCED: https://git.tamtaro.de/Excluded-Regex.json>"
+    ],
+    "syncedExcludedRegexUrls": [
+      "https://git.tamtaro.de/Excluded-Regex.json"
+    ],
+    "includedRegexPatterns": [],
+    "requiredRegexPatterns": [],
+    "preferredRegexPatterns": [],
+    "rankedRegexPatterns": [
+      {
+        "pattern": "/^(?!𝚅𝚒𝚍𝚑𝚒𝚗'𝚜 𝙴𝚗𝚐𝚕𝚒𝚜𝚑 𝚁𝚊𝚗𝚔𝚎𝚍 𝚁𝚎𝚐𝚎𝚡𝚎𝚜 (𝚜𝚢𝚗𝚌𝚎𝚍))𝚅𝚒𝚍𝚑𝚒𝚗'𝚜 𝙴𝚗𝚐𝚕𝚒𝚜𝚑 𝚁𝚊𝚗𝚔𝚎𝚍 𝚁𝚎𝚐𝚎𝚡𝚎𝚜 (𝚜𝚢𝚗𝚌𝚎𝚍)$/",
+        "name": "𝚅𝚒𝚍𝚑𝚒𝚗'𝚜 𝙴𝚗𝚐𝚕𝚒𝚜𝚑 𝚁𝚊𝚗𝚔𝚎𝚍 𝚁𝚎𝚐𝚎𝚡𝚎𝚜 (𝚜𝚢𝚗𝚌𝚎𝚍)",
+        "score": 0
+      },
+      {
+        "pattern": "<SYNCED: https://raw.githubusercontent.com/Vidhin05/Releases-Regex/main/English/regexes.json>",
+        "name": "",
+        "score": 0
+      },
+      {
+        "pattern": "<SYNCED: https://git.tamtaro.de/for-nour-Regex.json>",
+        "name": "",
+        "score": 0
+      }
+    ],
+    "syncedPreferredRegexUrls": [],
+    "syncedRankedRegexUrls": [
+      "https://raw.githubusercontent.com/Vidhin05/Releases-Regex/main/English/regexes.json",
+      "https://git.tamtaro.de/for-nour-Regex.json"
+    ],
+    "syncedPreferredStreamExpressionUrls": [
+      "https://git.tamtaro.de/PSE.json"
+    ],
+    "syncedExcludedStreamExpressionUrls": [
+      "https://git.tamtaro.de/ESE.json"
+    ],
+    "syncedIncludedStreamExpressionUrls": [
+      "https://git.tamtaro.de/ISE.json"
+    ],
+    "syncedRankedStreamExpressionUrls": [
+      "https://raw.githubusercontent.com/Vidhin05/Releases-Regex/main/English/expressions.json",
+      "https://git.tamtaro.de/for-nour-RSE.json"
+    ],
+    "requiredKeywords": [],
+    "includedKeywords": [],
+    "excludedKeywords": [],
+    "preferredKeywords": [],
+    "excludeSeederRange": [
+      0,
+      1000
+    ],
+    "includeSeederRange": [
+      0,
+      1000
+    ],
+    "requiredSeederRange": [
+      0,
+      1000
+    ],
+    "seederRangeTypes": [],
+    "excludeUncached": false,
+    "excludeUncachedMode": "or",
+    "requiredStreamExpressions": [],
+    "resultLimits": {
+      "mode": "conjunctive"
+    },
+    "preferredStreamExpressions": [
+      {
+        "expression": "<SYNCED: https://git.tamtaro.de/PSE.json>",
+        "enabled": true
+      }
+    ],
+    "includedStreamExpressions": {
+      "__switch": "services",
+      "cases": {
+        "": [
+          {
+            "expression": "/*تمرير اللغة العربية*/ passthrough(language(streams, 'Arabic'), 'language')",
+            "enabled": true
+          },
+          {
+            "expression": "/*اختيار أفضل مصادر التورنت ذات الترجمة العربية وبخمسة سيدرز أو أكثر مع الروابط المباشرة بحد أقصى خمسة*/ passthrough(   slice(     merge(       slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), '2160p'), 'Bluray REMUX'), 0, 1),       slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), '2160p'), 'Bluray'), 0, 1),       slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), '2160p'), 'WEB-DL'), 0, 1),        slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), '1080p'), 'Bluray REMUX'), 0, 1),       slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), '1080p'), 'Bluray'), 0, 1),       slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), '1080p'), 'WEB-DL'), 0, 1),        slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), '2160p'), 'Unknown'), 0, 1),       slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), '1080p'), 'Unknown'), 0, 1),        slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), 'Unknown'), 'Bluray REMUX'), 0, 1),       slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), 'Unknown'), 'Bluray'), 0, 1),       slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), 'Unknown'), 'WEB-DL'), 0, 1),        slice(quality(resolution(subtitle(merge(seeders(type(streams, 'p2p'), 5), type(streams, 'http')), 'Arabic'), 'Unknown'), 'Unknown'), 0, 1)     ),     0,     5   ),   'subtitle',   'excluded' )",
+            "enabled": true
+          },
+          {
+            "expression": "<SYNCED: https://git.tamtaro.de/ISE.json>",
+            "enabled": true
+          }
+        ]
+      },
+      "default": [
+        {
+          "expression": "/*تمرير لغة الصوت العربية*/ passthrough(language(streams, 'Arabic'), 'language')",
+          "enabled": true
+        },
+        {
+          "expression": "/*اختيار أفضل مصادر الديبرد المخزنة واليوزنت ذات الترجمة العربية بحد أقصى خمسة*/ passthrough(   slice(     merge(       slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), '2160p'), 'Bluray REMUX'), 0, 1),       slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), '2160p'), 'Bluray'), 0, 1),       slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), '2160p'), 'WEB-DL'), 0, 1),        slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), '1080p'), 'Bluray REMUX'), 0, 1),       slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), '1080p'), 'Bluray'), 0, 1),       slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), '1080p'), 'WEB-DL'), 0, 1),        slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), '2160p'), 'Unknown'), 0, 1),       slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), '1080p'), 'Unknown'), 0, 1),        slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), 'Unknown'), 'Bluray REMUX'), 0, 1),       slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), 'Unknown'), 'Bluray'), 0, 1),       slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), 'Unknown'), 'WEB-DL'), 0, 1),        slice(quality(resolution(subtitle(merge(cached(type(streams, 'debrid')), type(streams, 'usenet')), 'Arabic'), 'Unknown'), 'Unknown'), 0, 1)     ),     0,     5   ),   'subtitle',   'excluded' )",
+          "enabled": true
+        },
+        {
+          "expression": "<SYNCED: https://git.tamtaro.de/ISE.json>",
+          "enabled": true
+        }
+      ]
+    },
+    "usePosterRedirectApi": true,
+    "size": {
+      "global": {
+        "movies": [
+          0,
+          100000000000
+        ],
+        "series": [
+          0,
+          100000000000
+        ]
+      },
+      "resolution": {
+        "2160p": {
+          "movies": [
+            0,
+            100000000000
+          ]
+        }
+      }
+    },
+    "bitrate": {
+      "useMetadataRuntime": true,
+      "global": {
+        "movies": [
+          0,
+          250000000
+        ],
+        "series": [
+          0,
+          250000000
+        ]
+      }
+    },
+    "hideErrors": true,
+    "hideErrorsForResources": [
+      "addon_catalog",
+      "catalog",
+      "subtitles"
+    ],
+    "areYouStillThere": {
+      "enabled": false
+    },
+    "externalDownloads": false,
+    "autoRemoveDownloads": false,
+    "failover": {
+      "enabled": true,
+      "contentTypes": [
+        "usenet",
+        "debrid"
+      ],
+      "allowCrossType": true,
+      "maxAttempts": 5,
+      "parallel": 2,
+      "position": "beforeLimiting",
+      "precacheFailover": false,
+      "includeExternalFailover": true,
+      "sameReleaseLimit": 2
+    },
+    "serviceWrap": {
+      "enabled": false,
+      "reconfigureService": false
+    },
+    "healthChecks": {
+      "__switch": "services",
+      "cases": {
+        "": [
+          {
+            "id": "torrentio-down",
+            "url": "https://uptime.ibbylabs.dev/v1/health/torrentio",
+            "name": "Torrentio",
+            "expect": {
+              "status": "503",
+              "jsonPath": "up",
+              "jsonValue": false
+            }
+          },
+          {
+            "id": "torbox-down",
+            "url": "https://uptime.ibbylabs.dev/v1/health/torbox",
+            "name": "Torbox",
+            "expect": {
+              "status": "503",
+              "jsonPath": "up",
+              "jsonValue": false
+            }
+          },
+          {
+            "id": "realdebrid-down",
+            "url": "https://uptime.ibbylabs.dev/v1/health/realdebrid-rd",
+            "name": "Real-Debrid",
+            "expect": {
+              "status": "503",
+              "jsonPath": "up",
+              "jsonValue": false
+            }
+          },
+          {
+            "id": "premiumize-down",
+            "url": "https://uptime.ibbylabs.dev/v1/health/premiumize",
+            "name": "Premiumize",
+            "expect": {
+              "status": "503",
+              "jsonValue": false,
+              "jsonPath": "up"
+            }
+          },
+          {
+            "id": "torrin-down",
+            "url": "https://uptime.ibbylabs.dev/v1/health/torrin",
+            "name": "Torrin",
+            "expect": {
+              "status": "503",
+              "jsonValue": false,
+              "jsonPath": "up"
+            }
+          }
+        ]
+      },
+      "default": [
+        {
+          "id": "torrentio-down",
+          "name": "Torrentio",
+          "url": "https://uptime.ibbylabs.dev/v1/health/torrentio",
+          "expect": {
+            "status": "503",
+            "jsonPath": "up",
+            "jsonValue": false
+          }
+        },
+        {
+          "id": "torbox-down",
+          "name": "Torbox",
+          "url": "https://uptime.ibbylabs.dev/v1/health/torbox",
+          "expect": {
+            "status": "503",
+            "jsonPath": "up",
+            "jsonValue": false
+          }
+        },
+        {
+          "id": "realdebrid-down",
+          "name": "Real-Debrid",
+          "url": "https://uptime.ibbylabs.dev/v1/health/realdebrid-rd",
+          "expect": {
+            "status": "503",
+            "jsonPath": "up",
+            "jsonValue": false
+          }
+        },
+        {
+          "id": "premiumize-down",
+          "name": "Premiumize",
+          "url": "https://uptime.ibbylabs.dev/v1/health/premiumize",
+          "expect": {
+            "status": "503",
+            "jsonPath": "up",
+            "jsonValue": false
+          }
+        }
+      ]
+    },
+    "variants": {
+      "__switch": "services",
+      "cases": {
+        "": null
+      },
+      "default": [
+        {
+          "id": "torbox-down",
+          "script": "enable presets[type=hdhub]\nenable presets[type=penguplay]",
+          "name": "TorBox Down Fallback",
+          "when": "health('torbox-down')"
+        }
+      ]
+    },
+    "appliedTemplates": [
+      {
+        "id": "aioar.complete",
+        "version": "1.1.0",
+        "url": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/StremioLabAR-Complete-Setup.json"
+      }
+    ],
+    "services": null,
+    "presets": {
+      "__if": "inputs.addonPreset == default",
+      "__value": {
+        "__switch": "services",
+        "cases": {
+          "": [
+            {
+              "type": "stremthruTorz",
+              "instanceId": "bb9",
+              "enabled": true,
+              "options": {
+                "name": "STorz",
+                "timeout": 5000,
+                "resources": [
+                  "stream"
+                ],
+                "mediaTypes": [],
+                "includeP2P": true,
+                "useMultipleInstances": false,
+                "url": ""
+              },
+              "category": "Streams"
+            },
+            {
+              "type": "meteor",
+              "instanceId": "064",
+              "enabled": true,
+              "options": {
+                "name": "Meteor",
+                "timeout": 5000,
+                "resources": [
+                  "stream"
+                ],
+                "includeP2P": true,
+                "removeTrash": false,
+                "useMultipleInstances": false,
+                "mediaTypes": []
+              },
+              "category": "Streams"
+            },
+            {
+              "type": "comet",
+              "instanceId": "b0f",
+              "enabled": true,
+              "options": {
+                "name": "Comet",
+                "timeout": 5000,
+                "resources": [
+                  "stream"
+                ],
+                "includeP2P": true,
+                "removeTrash": false,
+                "mediaTypes": [],
+                "url": ""
+              },
+              "category": "Streams"
+            },
+            {
+              "type": "hdhub",
+              "instanceId": "29a",
+              "enabled": true,
+              "options": {
+                "name": "HdHub",
+                "timeout": 5000,
+                "resources": [
+                  "stream"
+                ],
+                "mediaTypes": [],
+                "tb_only": false
+              },
+              "category": "Streams"
+            },
+            {
+              "type": "sootio",
+              "instanceId": "9d3",
+              "enabled": true,
+              "options": {
+                "name": "Sootio",
+                "timeout": 5000,
+                "resources": [
+                  "stream"
+                ],
+                "httpProviders": [
+                  "http4khdhub",
+                  "httpHDHub4u",
+                  "httpUHDMovies",
+                  "httpMoviesDrive",
+                  "httpMKVCinemas",
+                  "httpMkvDrama",
+                  "httpMalluMv",
+                  "httpCineDoze",
+                  "httpNetflixMirror",
+                  "httpVixSrc"
+                ],
+                "mediaTypes": [],
+                "useMultipleInstances": false,
+                "url": "https://sooti.info"
+              },
+              "category": "Streams"
+            },
+            {
+              "type": "opensubtitles-v3-plus",
+              "instanceId": "262",
+              "enabled": true,
+              "options": {
+                "name": "OpenSubtitles V3+",
+                "timeout": 7500,
+                "resources": [
+                  "subtitles"
+                ],
+                "language": [
+                  "ar"
+                ],
+                "sources": "all",
+                "includeAiTranslated": false,
+                "movieHashPlusAutoAdjustment": false
+              },
+              "category": "SUBS",
+              "__if": "inputs.subtitleAddons == yes"
+            },
+            {
+              "type": "subdl",
+              "instanceId": "4dd",
+              "enabled": true,
+              "options": {
+                "name": "SubDL",
+                "timeout": 7500,
+                "resources": [
+                  "subtitles"
+                ],
+                "language": [
+                  "AR"
+                ],
+                "hearingImpairment": "hiExclude",
+                "subDlApiKey": "<template_placeholder>"
+              },
+              "category": "SUBS",
+              "__if": "inputs.subtitleAddons == yes"
+            },
+            {
+              "type": "subsource",
+              "instanceId": "3e8",
+              "enabled": true,
+              "options": {
+                "name": "SubSource",
+                "timeout": 7500,
+                "resources": [
+                  "subtitles"
+                ],
+                "language": [
+                  "Arabic"
+                ],
+                "subtitleTypes": [
+                  1,
+                  2,
+                  3,
+                  4
+                ],
+                "hearingImpairment": "hiExclude",
+                "subSourceApiKey": "<template_placeholder>"
+              },
+              "category": "SUBS",
+              "__if": "inputs.subtitleAddons == yes"
+            },
+            {
+              "__if": "inputs.penguPlayUrlNoDebrid",
+              "type": "penguplay",
+              "instanceId": "13d",
+              "enabled": true,
+              "options": {
+                "name": "PenguPlay",
+                "manifestUrl": "{{inputs.penguPlayUrlNoDebrid}}",
+                "timeout": 5000,
+                "resources": [
+                  "stream",
+                  "subtitles",
+                  "meta",
+                  "catalog"
+                ],
+                "mediaTypes": []
+              },
+              "category": "Streams"
+            }
+          ]
+        },
+        "default": [
+          {
+            "type": "torznab",
+            "instanceId": "6a6",
+            "enabled": true,
+            "options": {
+              "name": "ComeTorz",
+              "timeout": 5000,
+              "mediaTypes": [],
+              "searchMode": "auto",
+              "seasonEpisodeStrategy": "dynamic",
+              "paginate": false,
+              "useMultipleInstances": false,
+              "api": {
+                "url": "https://comet.feels.legal/torznab/api"
+              }
+            },
+            "category": "Streams"
+          },
+          {
+            "type": "stremthruTorz",
+            "instanceId": "609",
+            "enabled": true,
+            "options": {
+              "name": "STorz",
+              "timeout": 5000,
+              "resources": [
+                "stream"
+              ],
+              "url": "",
+              "mediaTypes": [],
+              "includeP2P": false,
+              "useMultipleInstances": false
+            },
+            "category": "Streams"
+          },
+          {
+            "type": "knaben",
+            "instanceId": "dc9",
+            "enabled": true,
+            "options": {
+              "name": "Knaben",
+              "timeout": 5000,
+              "mediaTypes": [],
+              "useMultipleInstances": false
+            },
+            "category": "Streams"
+          },
+          {
+            "type": "the-pirate-bay",
+            "instanceId": "652",
+            "enabled": true,
+            "options": {
+              "name": "The Pirate Bay",
+              "timeout": 5000,
+              "mediaTypes": [],
+              "useMultipleInstances": false
+            },
+            "category": "Streams"
+          },
+          {
+            "type": "tsukihime",
+            "instanceId": "tsh",
+            "enabled": true,
+            "options": {
+              "name": "TsukiHime",
+              "timeout": 5000,
+              "mediaTypes": [
+                "anime"
+              ],
+              "useMultipleInstances": false
+            },
+            "category": "Streams"
+          },
+          {
+            "type": "library",
+            "instanceId": "ae7",
+            "enabled": true,
+            "options": {
+              "name": "Library",
+              "timeout": 5000,
+              "resources": [
+                "stream",
+                "meta"
+              ],
+              "mediaTypes": [],
+              "showRefreshActions": [
+                "catalog"
+              ],
+              "skipProcessing": false,
+              "hideStreams": false,
+              "useMultipleInstances": false
+            },
+            "category": "Streams"
+          },
+          {
+            "type": "opensubtitles-v3-plus",
+            "instanceId": "262",
+            "enabled": true,
+            "options": {
+              "name": "OpenSubtitles V3+",
+              "timeout": 7500,
+              "resources": [
+                "subtitles"
+              ],
+              "language": [
+                "ar"
+              ],
+              "sources": "all",
+              "includeAiTranslated": true,
+              "movieHashPlusAutoAdjustment": true
+            },
+            "category": "SUBS",
+            "__if": "inputs.subtitleAddons == yes"
+          },
+          {
+            "type": "subsource",
+            "instanceId": "52a",
+            "enabled": true,
+            "options": {
+              "name": "SubSource",
+              "timeout": 7500,
+              "resources": [
+                "subtitles"
+              ],
+              "language": [
+                "Arabic"
+              ],
+              "subtitleTypes": [
+                1,
+                2,
+                3,
+                4
+              ],
+              "hearingImpairment": "hiExclude",
+              "subSourceApiKey": "<template_placeholder>"
+            },
+            "category": "SUBS",
+            "__if": "inputs.subtitleAddons == yes"
+          },
+          {
+            "type": "subdl",
+            "instanceId": "bbd",
+            "enabled": true,
+            "options": {
+              "name": "SubDL",
+              "timeout": 7500,
+              "resources": [
+                "subtitles"
+              ],
+              "language": [
+                "AR"
+              ],
+              "hearingImpairment": "hiExclude",
+              "subDlApiKey": "<template_placeholder>"
+            },
+            "category": "SUBS",
+            "__if": "inputs.subtitleAddons == yes"
+          },
+          {
+            "type": "hdhub",
+            "instanceId": "b2f",
+            "enabled": false,
+            "options": {
+              "name": "HdHub",
+              "timeout": 5500,
+              "resources": [
+                "stream"
+              ],
+              "mediaTypes": [],
+              "tb_only": false
+            },
+            "category": "Streams"
+          },
+          {
+            "__if": "inputs.penguPlayUrl",
+            "type": "penguplay",
+            "instanceId": "13d",
+            "enabled": false,
+            "options": {
+              "name": "PenguPlay",
+              "manifestUrl": "{{inputs.penguPlayUrl}}",
+              "timeout": 5000,
+              "resources": [
+                "stream",
+                "subtitles",
+                "meta",
+                "catalog"
+              ],
+              "mediaTypes": []
+            },
+            "category": "Streams"
+          }
+        ]
+      }
+    },
+    "catalogModifications": {
+      "__if": "inputs.addonPreset == default",
+      "__value": {
+        "__switch": "services",
+        "cases": {
+          "": []
+        },
+        "default": [
+          {
+            "id": "ae7791b.aiostreams::library.torbox",
+            "name": "TorBox",
+            "type": "library",
+            "enabled": true,
+            "shuffle": false,
+            "usePosterService": false,
+            "hideable": true,
+            "searchable": true,
+            "addonName": "Library",
+            "onlyOnDiscover": true
+          }
+        ]
+      }
+    },
+    "groups": {
+      "__if": "inputs.addonPreset == default",
+      "__value": {
+        "enabled": false
+      }
+    },
+    "addonCategoryColors": {
+      "__if": "inputs.addonPreset == default",
+      "__value": {
+        "Mix": "indigo",
+        "Debrid": "emerald",
+        "Usenet": "lime",
+        "HTTP": "cyan",
+        "P2P": "orange",
+        "Subs": "purple",
+        "Streams": "blue",
+        "SUBS": "purple"
+      }
+    },
+    "mergedCatalogs": {
+      "__if": "inputs.addonPreset == default",
+      "__value": []
+    },
+    "formatter": {
+      "__if": "inputs.formatterChoice != retain",
+      "__value": {
+        "__switch": "inputs.formatterChoice",
+        "cases": {
+          "tamtaro": {
+            "id": "custom",
+            "definitions": {
+              "custom": {
+                "name": "{service.cached::istrue[\"⚡\"||\"\"]}{service.cached::isfalse[\"‍⏳‍​\"||\"\"]}{stream.resolution::exists[\"{stream.resolution::replace('2160p','4K ')::replace('1440p','2K ')::replace('p','P ')}‍\"||\"‍ \"]}{stream.type::exists[\"‍{stream.type::replace('debrid','')::replace('p2p','⁽ᵖ²ᵖ⁾')::replace('http','⁽ʷᵉᵇ⁾')::replace('usenet','⁽ⁿᶻᵇ⁾')}‍‍‍ \"||\"\"]}{stream.quality::exists[\"· {stream.quality::title::replace('Bluray Remux','Remux')::replace('Web-dl','Web‍DL')::replace('Hc Hd-rip','HC HDrip')::replace('Hdrip','HDrip')} \"||\"‍‍\"]}{stream.nSeScore::>5[\"· {stream.nSeScore}%\"||\"\"]}\n",
+                "description": "{tools.removeLine}\\n✎  {stream.library::istrue[\"☁︎  \"||\"\"]}{stream.title::exists[\"{stream.title::title::truncate(30)}\"||\"{metadata.title::truncate(30)}\"]}{stream.library::istrue[\" \"||\"\"]}{stream.episodes::exists::isfalse::and::stream.seasons::exists::isfalse[\"{stream.year::exists[\" ({stream.year})\"||\"{metadata.year::exists[\" ({metadata.year})\"||\"\"]}\"]}\"||\"\"]}{stream.seasonEpisode::exists[\"  |  {stream.seasonEpisode::join(' · ')}\"||\"\"]}\\n▣  {stream.encode::exists[\"{stream.encode} {stream.visualTags::exists::and::stream.visualTags::in('IMAX')::isfalse[\"· \"||\"\"]}\"||\"\"]}{stream.visualTags::exists::and::stream.visualTags::in('IMAX')::isfalse[\"{stream.visualTags::remove('Upscaled')::remove('AI')::sort::join(' · ')::replace('HDR · HDR','HDR')::replace(' · IMAX','')::replace('10bit','10B')}{stream.upscaled::istrue::or::stream.filename::~AI-Enhanced::or::stream.filename::~Ai Upscale[\"{stream.visualTags::remove('Upscaled')::remove('AI')::exists[\" · \"||\"\"]}AI✦\"||\"\"]} \"||\"\"]}\n♬  {stream.audioTags::exists[\"{stream.audioTags::lsort::join(' · ')::replace('DD · DD','DD')::replace('DTS · DTS','DTS')} {stream.audioChannels::exists[\"· \"||\"\"]}\"||\"\"]}{stream.audioChannels::exists[\"{stream.audioChannels::join(' · ')} \"||\"\"]}\n{stream.size::>0[\"{stream.seasonPack::istrue[\"❖  \"||\"◈  \"]}\"||\"\"]}{stream.size::>0[\"{stream.size::sbytes}\"||\"{stream.folderSize::>0[\"{stream.folderSize::sbytes}\"||\"\"]}\"]}{? · {stream.bitrate::sbitrate} ?}{stream.duration::>0[\" · ⏱︎ {stream.duration::time('%-H:%M')}\"||\"{metadata.episodeRuntime::>0[\" · ⏱︎ {metadata.episodeRuntime::time('%-H:%M')}\"||\"{metadata.runtime::>0[\" · ⏱︎ {metadata.runtime::time('%-H:%M')}\"||\"\"]}\"]}\"]}{stream.message::~Download[\"{tools.removeLine}\"||\"\"]}{stream.type::=p2p::and::stream.seeders::>0[\" · {stream.seeders}𐦂𖨆𐀪𖠋 \"||\"\"]}{stream.type::=debrid::and::service.cached::isfalse::and::stream.seeders::>0[\" · {stream.seeders}𐦂𖨆𐀪𖠋 \"||\"\"]}{stream.type::=usenet::and::stream.age::exists[\" · {stream.age}\"||\"\"]}\n{stream.proxied::istrue[\"⛊  \"||\"⛉  \"]}{service.shortName::exists[\"[{service.shortName}] \"||\"\"]}{addon.name::=DrunkenSlug[\"\"||\"{addon.name::in('altHUB','AnimeTosho','NinjaCentral','Nzb.life','NZBFinder','NZBgeek','NzbPlanet','NZBatlas','Nzbnest','Usenet Crawler')[\"\"||\"{addon.name} \"]}\"]}{stream.private::istrue[\" · ꄗ \"||\"\"]}{? · {stream.releaseGroup::truncate(20)}?}{stream.indexer::exists::and::stream.type::~usenet[\" · {stream.indexer::replace('usenet-crawler','UC')::replace('Usenet Crawler','UC')::truncate(13)}\"||\"\"]}{stream.message::~Download[\"{tools.removeLine}\\n\"||\"\"]}\n⛿{stream.uLanguages::exists[\"  {metadata.isAnime::istrue::and::stream.uLanguages::in('japanese')[\"ᴊᴀ\"||\"{stream.uLanguages::in('arabic')[\"{stream.uLanguages::in('english')[\"ᴀʀ | ᴇɴ\"||\"ᴀʀ\"]}\"||\"{stream.uLanguages::in('english')[\"ᴇɴ\"||\"{stream.uSmallLanguageCodes::first::replace('ᴅᴜᴀʟ ᴀᴜᴅɪᴏ','ᴅᴜᴏ')::replace('ᴅᴜʙʙᴇᴅ','ᴅᴜʙ')}\"]}\"]}\"]} \"||\"(?) \"]}{stream.subbed::istrue[\"{stream.uLanguages::exists[\"· sᴜʙ \"||\"sᴜʙ \"]}\"||\"\"]}{stream.subtitles::exists[\"{stream.subtitles::in('arabic')[\"(ᴀʀ🇸🇦) \"||\"{stream.subtitles::in('english')[\"(ᴇɴ🇺🇸) \"||\"(🏳️) \"]}\"]}\"||\"{stream.subbed::istrue[\"{stream.languages::in('arabic')[\"(ᴀʀ🇸🇦?) \"||\"{stream.languages::in('english')[\"(ᴇɴ🇺🇸?) \"||\"(🏳️?) \"]}\"]}\"||\"\"]}\"]}{stream.filename::~BW[\"· ◐ ʙʟᴀᴄᴋ & ᴡʜɪᴛᴇ \"||\"\"]}{stream.seadexBest::istrue[\"· ʙᴇsᴛ \"||\"{stream.seadex::istrue[\\\"· ᴀʟᴛ ʙᴇsᴛ \\\"||\\\"\\\"]}\"]}{stream.rseMatched::in('T1','Remux T1','Bluray T1','Blu-ray T1','Web T1','WEB T1','WEB-DL T1','WEBDL T1','WEBRip T1')[\" · ᴛ1\"||\"\"]}{stream.rseMatched::in('T2','Remux T2','Bluray T2','Blu-ray T2','Web T2','WEB T2','WEB-DL T2','WEBDL T2','WEBRip T2')[\" · ᴛ2\"||\"\"]}{stream.rseMatched::in('T3','Remux T3','Bluray T3','Blu-ray T3','Web T3','WEB T3','WEB-DL T3','WEBDL T3','WEBRip T3')[\" · ᴛ3\"||\"\"]}{stream.rseMatched::in('T4','Remux T4','Bluray T4','Blu-ray T4','Web T4','WEB T4','WEB-DL T4','WEBDL T4','WEBRip T4')[\" · ᴛ4\"||\"\"]}{? · {stream.network::upper::smallcaps}?}{service.cached::istrue::and::stream.message::~Download::istrue[\"\\n➥ DL Stream\"||\"\"]}{stream.preloading::~true[\" · ⇣ Preloaded\"||\"\"]} "
+              }
+            }
+          },
+          "jellyfin": {
+            "id": "custom",
+            "definitions": {
+              "custom": {
+                "name": "{stream.resolution::exists[\"{stream.resolution::replace('2160p','4K')::replace('1440p','2K')::replace('p','P')}\"||\"?\"]} {service.cached::istrue[\"⚡️\"||\"\"]}{service.cached::isfalse[\"⏳\"||\"\"]} {stream.type::=debrid[\"({service.shortName::exists[\"{service.shortName}\"||\"Debrid\"]})\"||\"{stream.type::=usenet[\"(nzb)\"||\"{stream.type::=http[\"(web)\"||\"{stream.type::=p2p[\"(p2p)\"||\"\"]}\"]}\"]}\"]}{stream.quality::exists[\" · {stream.quality::title::replace('Bluray Remux','Remux')::replace('Web-dl','WebDL')::replace('Hc Hd-rip','HC HDrip')::replace('Hdrip','HDrip')}\"||\"\"]}{stream.nSeScore::>0[\" · {stream.nSeScore}%\"||\"\"]} · {stream.subtitles::in('arabic')[\"🇸🇦\"||\"{stream.subtitles::in('english')[\"🇺🇸\"||\"{stream.subtitles::exists[\"🏳️\"||\"{stream.subbed::istrue::and::stream.languages::in('arabic')[\"🇸🇦❔\"||\"{stream.subbed::istrue::and::stream.languages::in('english')[\"🇺🇸❔\"||\"🏳️\"]}\"]}\"]}\"]}\"]} · {metadata.type::=movie[\"{metadata.title::exists[\"{metadata.title::truncate(24)}\"||\"{stream.title::truncate(24)}\"]}\"||\"{stream.seasonEpisode::exists[\"{stream.seasonEpisode::join('')}\"||\"{stream.formattedSeasons::exists[\"{stream.formattedSeasons}{stream.formattedEpisodes}\"||\"S{metadata.season}E{metadata.episode}\"]}\"]}\"]}",
+                "description": ""
+              }
+            }
+          }
+        },
+        "default": {
+          "id": "custom",
+          "definitions": {
+            "custom": {
+              "name": "{stream.resolution::exists[\"{stream.resolution::replace('2160p','فوركي')::replace('1440p','تو كي')::replace('1080p','فل اتش دي')::replace('720p','اتش دي')::replace('576p','اس دي')::replace('480p','اس دي')::replace('360p','جودة منخفضة')::replace('240p','جودة منخفضة')::replace('144p','جودة منخفضة')}\"||\"الدقة غير معروفة\"]}{stream.quality::in('Unknown','unknown')[\"\"||\"{stream.quality::exists[\" {stream.quality::replace('BluRay REMUX','بلوراي ريموكس')::replace('Bluray REMUX','بلوراي ريموكس')::replace('Bluray Remux','بلوراي ريموكس')::replace('BluRay Remux','بلوراي ريموكس')::replace('REMUX','ريموكس')::replace('Remux','ريموكس')::replace('Blu-ray','بلوراي')::replace('BluRay','بلوراي')::replace('Bluray','بلوراي')::replace('WEB-DL','ويب ديل')::replace('Web-dl','ويب ديل')::replace('WEBRip','ويب ريب')::replace('Webrip','ويب ريب')::replace('HDrip','اتش دي ريب')::replace('HDTV','اتش دي تي في')::replace('CAM','كام')::replace('Cam','كام')}\"||\"\"]}\"]}{stream.type::exists[\" ⁽{stream.type::replace('p2p','تورنت')::replace('usenet','يوزنت')::replace('http','مباشر')::replace('debrid','ديبرد')}{service.cached::exists[\"{service.cached::istrue[\"⚡️\"||\"⏳\"]}\"||\"\"]}⁾\"||\"\"]}{stream.nSeScore::>5[\" {stream.nSeScore::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')}٪؜\"||\"\"]}",
+              "description": "{metadata.episodeTitle::exists[\"✏️ ⁧الحلقة: {metadata.episodeTitle::truncate(40)} S{metadata.season}E{metadata.episode}⁩ | 🗓️ ⁧سنة الإنتاج: {metadata.year::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')}⁩\"||\"✏️ ⁧الفلم: {metadata.title::truncate(40)}⁩ | 🗓️ ⁧سنة الإنتاج: {metadata.year::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')}⁩\"]}\\n⁧{stream.quality::in('Unknown','unknown')[\"الجودة: غير معروفة ⚠️\"||\"{stream.quality::exists[\"الجودة: {stream.quality::replace('BluRay REMUX','بلوراي ريمكس')::replace('Bluray REMUX','بلوراي ريمكس')::replace('Bluray Remux','بلوراي ريمكس')::replace('REMUX','ريمكس')::replace('Remux','ريمكس')::replace('Blu-ray','بلوراي')::replace('BluRay','بلوراي')::replace('Bluray','بلوراي')::replace('WEB-DL','ويب ديل')::replace('Web-dl','ويب ديل')::replace('WEBRip','ويب ريب')::replace('Webrip','ويب ريب')::replace('HDrip','اتش دي ريب')::replace('HDTV','اتش دي تي في')::replace('CAM','كام')::replace('Cam','كام')} {stream.quality::in('BluRay REMUX','Bluray REMUX','Bluray Remux','REMUX','Remux','Blu-ray','BluRay','Bluray')[\"🎥\"||\"📺\"]}\"||\"الجودة: غير معروفة ⚠️\"]}\"]}⁩ | ⁧{stream.resolution::in('Unknown','unknown')[\"الدقة: غير معروفة ⚠️\"||\"{stream.resolution::exists[\"الدقة: {stream.resolution::replace('2160p','فوركي')::replace('1440p','تو كي')::replace('1080p','فل اتش دي')::replace('720p','اتش دي')::replace('576p','اس دي')::replace('480p','اس دي')} {stream.resolution::=2160p[\"🖥️\"||\"💻\"]}\"||\"الدقة: غير معروفة ⚠️\"]}\"]}⁩\\n⁧{stream.type::=p2p[\"السيدرز: {stream.seeders::exists[\"{stream.seeders::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 𐦂𖨆𐀪𖠋\"||\"غير معروف\"]}\"||\"الخدمة: {stream.type::=http[\"بدون خدمة 🔴\"||\"{service.name::exists[\"{service.name::replace('AllDebrid','اول ديبرد')::replace('RealDebrid','ريل ديبرد')::replace('Real-Debrid','ريل ديبرد')::replace('TorBox','توربوكس')::replace('OffCloud','اوف كلاود')::replace('Premiumize','بريميومايز')}\"||\"بدون خدمة\"]}{service.id::=torbox[\" 🟢\"||\"\"]}{service.id::=alldebrid[\" ⚫️\"||\"\"]}{service.id::=realdebrid[\" ⚫️\"||\"\"]}{service.id::=offcloud[\" 🔵\"||\"\"]}{service.id::=premiumize[\" 🔴\"||\"\"]}{service.id::=easynews[\" 🔵\"||\"\"]}{service.id::=aiostreams[\" ⚫️\"||\"\"]}\"]}\"]}⁩ | ⁧الإضافة: {addon.name::exists[\"{addon.name::replace('The Pirate Bay','ذا بايرت باي')::replace('ComeTorz','كوميتورز')::replace('Cometoz','كوميتووز')::replace('PenguPlay','بينقو بلاي')::replace('HDHub','اتش دي هب')::replace('HdHub','اتش دي هب')::replace('HD Hub','اتش دي هب')::replace('Library','المكتبة')::replace('Knaben','كانيبن')::replace('Meteor','ميتيور')::replace('Sootio','سوتيو')::replace('sTorz','تورز')::replace('STorz','تورز')::replace('Torz','تورز')::replace('Comet','كوميت')::replace('comet','كوميت')::replace('aradeb','عردب')}\"||\"غير معروفة\"]} 🧩⁩\\n{stream.size::>0[\"⁧الحجم: {stream.size::sbytes::replace('GiB','قيقا')::replace('GB','قيقا')::replace('MiB','ميقا')::replace('MB','ميقا')::replace('TiB','تيرا')::replace('TB','تيرا')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 💾⁩\"||\"{stream.folderSize::>0[\"⁧الحجم: {stream.folderSize::sbytes::replace('GiB','قيقا')::replace('GB','قيقا')::replace('MiB','ميقا')::replace('MB','ميقا')::replace('TiB','تيرا')::replace('TB','تيرا')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 💾⁩\"||\"\"]}\"]}{? | ⁧البت ريت: {stream.bitrate::sbitrate::replace('Gbps','غيغابت')::replace('Mbps','ميغابت')::replace('Kbps','كيلوبت')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 📶⁩ ?}{stream.duration::>0[\" | ⁧المدة: {stream.duration::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"{metadata.episodeRuntime::>0[\" | ⁧المدة: {metadata.episodeRuntime::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"{metadata.runtime::>0[\" | ⁧المدة: {metadata.runtime::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"\"]}\"]}\"]}\\n{stream.audioTags::exists[\"⁧الصوت: {stream.audioTags::in('Atmos','DD+','DD','TrueHD','EAC3','AC3')[\"دولبي {stream.audioTags::keep('Atmos','DD+','DD','TrueHD','EAC3','AC3')::lsort::replace('Atmos','أتموس')::replace('TrueHD','ترو إتش دي')::replace('EAC3','ديجيتال بلس')::replace('AC3','ديجيتال')::replace('DD+','ديجيتال بلس')::replace('DD','ديجيتال')::unique::join('، ')}{stream.audioTags::remove('Atmos','DD+','DD','TrueHD','EAC3','AC3')::exists[\"، \"||\"\"]}\"||\"\"]}{stream.audioTags::remove('Atmos','DD+','DD','TrueHD','EAC3','AC3')::lsort::replace('DTS-HD MA','دي تي إس إتش دي ماستر أوديو')::replace('DTS-HD','دي تي إس إتش دي')::replace('DTS-ES','دي تي إس إي إس')::replace('DTS:X','دي تي إس إكس')::replace('DTS','دي تي إس')::replace('OPUS','أوبوس')::replace('FLAC','فلاك')::replace('AAC','إيه إيه سي')::replace('LPCM','إل بي سي إم')::replace('PCM','بي سي إم')::replace('Unknown','غير معروف')::unique::join('، ')} 🔊⁩\"||\"⁧الصوت: غير معروف 🔊⁩\"]} | {stream.audioChannels::exists[\"⁧القنوات: {stream.audioChannels::join('، ')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')::replace('Unknown','غير معروفة')} 🎚️⁩\"||\"⁧القنوات: غير معروفة 🎚️⁩\"]}\\n{stream.encode::exists[\"⁧الترميز: {stream.encode::replace('HEVC','إتش إي في سي')::replace('H.265','إتش ٢٦٥')::replace('H265','إتش ٢٦٥')::replace('x265','إكس ٢٦٥')::replace('AVC','إيه في سي')::replace('H.264','إتش ٢٦٤')::replace('H264','إتش ٢٦٤')::replace('x264','إكس ٢٦٤')::replace('AV1','إيه في ون')::replace('VP9','في بي ٩')::replace('VP8','في بي ٨')::replace('MPEG-4','إم بي إي جي ٤')::replace('MPEG-2','إم بي إي جي ٢')::replace('VC-1','في سي ١')::replace('XviD','إكس فيد')::replace('DivX','ديف إكس')::replace('Unknown','غير معروف')} 🎞️⁩\"||\"⁧الترميز: غير معروف 🎞️⁩\"]} | {stream.visualTags::exists[\"⁧الصورة: {stream.visualTags::in('HDR10+','HDR10P','HDR10PLUS')[\"إتش دي آر ١٠ بلس{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"{stream.visualTags::in('HDR10')[\"إتش دي آر ١٠{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"{stream.visualTags::in('HDR')[\"إتش دي آر{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"\"]}\"]}\"]}{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::replace('HDR+DV','إتش دي آر مع دولبي فيجن')::replace('DV Only','دولبي فيجن فقط')::replace('HDR Only','إتش دي آر فقط')::replace('DV','دولبي فيجن')::replace('HLG','إتش إل جي')::replace('10bit','١٠ بت')::replace('10-bit','١٠ بت')::replace('SDR','إس دي آر')::replace('IMAX','آيماكس')::replace('AI','ذكاء اصطناعي')::replace('Upscaled','مرفوعة الدقة')::replace('3D','ثلاثي الأبعاد')::replace('H-OU','ثلاثي الأبعاد نصف علوي وسفلي')::replace('H-SBS','ثلاثي الأبعاد نصف جانبي')::replace('Unknown','غير معروفة')::unique::sort::join('، ')} 📷⁩\"||\"⁧الصورة: غير معروفة 📷⁩\"]}\\n⁧لغة الصوت: {stream.uLanguages::in('arabic')[\"{stream.uLanguages::in('english')[\"العربية 🇸🇦 والإنجليزية 🇺🇸\"||\"العربية 🇸🇦\"]}\"||\"{stream.uLanguages::in('english')[\"الإنجليزية 🇺🇸\"||\"غير معروفة ❓\"]}\"]}⁩ | ⁧{stream.subtitles::in('arabic')[\"الترجمة العربية متوفرة ✅\"||\"{stream.subtitles::exists[\"الترجمة العربية غير متوفرة ❌\"||\"{stream.subbed::istrue::and::stream.languages::in('arabic')[\"احتمالية وجود ترجمة عربية ❓\"||\"الترجمة العربية غير متوفرة ❌\"]}\"]}\"]}⁩"
+            }
+          }
+        }
+      }
+    },
+    "sortCriteria": {
+      "__switch": "inputs.sortingOrder",
+      "cases": {
+        "quality": {
+          "__switch": "services",
+          "cases": {
+            "": {
+              "global": [
+                {
+                  "key": "quality",
+                  "direction": "desc"
+                },
+                {
+                  "key": "resolution",
+                  "direction": "desc"
+                },
+                {
+                  "key": "streamExpressionScore",
+                  "direction": "desc"
+                },
+                {
+                  "key": "streamExpressionMatched",
+                  "direction": "desc"
+                },
+                {
+                  "key": "seeders",
+                  "direction": "desc"
+                },
+                {
+                  "key": "subtitle",
+                  "direction": "desc"
+                },
+                {
+                  "key": "seadex",
+                  "direction": "desc"
+                }
+              ],
+              "series": [],
+              "anime": [],
+              "cached": [],
+              "cachedMovies": [],
+              "uncached": []
+            }
+          },
+          "default": {
+            "global": [
+              {
+                "key": "cached",
+                "direction": "desc"
+              }
+            ],
+            "series": [],
+            "anime": [],
+            "cached": [
+              {
+                "key": "quality",
+                "direction": "desc"
+              },
+              {
+                "key": "resolution",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionMatched",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionScore",
+                "direction": "desc"
+              },
+              {
+                "key": "library",
+                "direction": "desc"
+              },
+              {
+                "key": "subtitle",
+                "direction": "desc"
+              },
+              {
+                "key": "language",
+                "direction": "desc"
+              },
+              {
+                "key": "seadex",
+                "direction": "desc"
+              }
+            ],
+            "uncached": [
+              {
+                "key": "quality",
+                "direction": "desc"
+              },
+              {
+                "key": "resolution",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionMatched",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionScore",
+                "direction": "desc"
+              },
+              {
+                "key": "seeders",
+                "direction": "desc"
+              },
+              {
+                "key": "age",
+                "direction": "asc"
+              },
+              {
+                "key": "subtitle",
+                "direction": "desc"
+              },
+              {
+                "key": "seadex",
+                "direction": "desc"
+              },
+              {
+                "key": "language",
+                "direction": "desc"
+              }
+            ],
+            "cachedMovies": []
+          }
+        },
+        "subtitle": {
+          "__switch": "services",
+          "cases": {
+            "": {
+              "global": [
+                {
+                  "key": "subtitle",
+                  "direction": "desc"
+                },
+                {
+                  "key": "resolution",
+                  "direction": "desc"
+                },
+                {
+                  "key": "quality",
+                  "direction": "desc"
+                },
+                {
+                  "key": "streamExpressionScore",
+                  "direction": "desc"
+                },
+                {
+                  "key": "streamExpressionMatched",
+                  "direction": "desc"
+                },
+                {
+                  "key": "seeders",
+                  "direction": "desc"
+                },
+                {
+                  "key": "seadex",
+                  "direction": "desc"
+                }
+              ],
+              "series": [],
+              "anime": [],
+              "cached": [],
+              "cachedMovies": [],
+              "uncached": []
+            }
+          },
+          "default": {
+            "global": [
+              {
+                "key": "cached",
+                "direction": "desc"
+              }
+            ],
+            "series": [],
+            "anime": [],
+            "cached": [
+              {
+                "key": "subtitle",
+                "direction": "desc"
+              },
+              {
+                "key": "resolution",
+                "direction": "desc"
+              },
+              {
+                "key": "quality",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionMatched",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionScore",
+                "direction": "desc"
+              },
+              {
+                "key": "library",
+                "direction": "desc"
+              },
+              {
+                "key": "language",
+                "direction": "desc"
+              },
+              {
+                "key": "seadex",
+                "direction": "desc"
+              }
+            ],
+            "uncached": [
+              {
+                "key": "subtitle",
+                "direction": "desc"
+              },
+              {
+                "key": "resolution",
+                "direction": "desc"
+              },
+              {
+                "key": "quality",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionMatched",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionScore",
+                "direction": "desc"
+              },
+              {
+                "key": "seeders",
+                "direction": "desc"
+              },
+              {
+                "key": "age",
+                "direction": "asc"
+              },
+              {
+                "key": "seadex",
+                "direction": "desc"
+              },
+              {
+                "key": "language",
+                "direction": "desc"
+              }
+            ],
+            "cachedMovies": []
+          }
+        }
+      },
+      "default": {
+        "__switch": "services",
+        "cases": {
+          "": {
+            "global": [
+              {
+                "key": "resolution",
+                "direction": "desc"
+              },
+              {
+                "key": "quality",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionScore",
+                "direction": "desc"
+              },
+              {
+                "key": "streamExpressionMatched",
+                "direction": "desc"
+              },
+              {
+                "key": "seeders",
+                "direction": "desc"
+              },
+              {
+                "key": "subtitle",
+                "direction": "desc"
+              },
+              {
+                "key": "seadex",
+                "direction": "desc"
+              }
+            ],
+            "series": [],
+            "anime": [],
+            "cached": [],
+            "cachedMovies": [],
+            "uncached": []
+          }
+        },
+        "default": {
+          "global": [
+            {
+              "key": "cached",
+              "direction": "desc"
+            }
+          ],
+          "series": [],
+          "anime": [],
+          "cached": [
+            {
+              "key": "resolution",
+              "direction": "desc"
+            },
+            {
+              "key": "quality",
+              "direction": "desc"
+            },
+            {
+              "key": "streamExpressionMatched",
+              "direction": "desc"
+            },
+            {
+              "key": "streamExpressionScore",
+              "direction": "desc"
+            },
+            {
+              "key": "library",
+              "direction": "desc"
+            },
+            {
+              "key": "subtitle",
+              "direction": "desc"
+            },
+            {
+              "key": "language",
+              "direction": "desc"
+            },
+            {
+              "key": "seadex",
+              "direction": "desc"
+            }
+          ],
+          "uncached": [
+            {
+              "key": "resolution",
+              "direction": "desc"
+            },
+            {
+              "key": "quality",
+              "direction": "desc"
+            },
+            {
+              "key": "streamExpressionMatched",
+              "direction": "desc"
+            },
+            {
+              "key": "streamExpressionScore",
+              "direction": "desc"
+            },
+            {
+              "key": "seeders",
+              "direction": "desc"
+            },
+            {
+              "key": "age",
+              "direction": "asc"
+            },
+            {
+              "key": "subtitle",
+              "direction": "desc"
+            },
+            {
+              "key": "seadex",
+              "direction": "desc"
+            },
+            {
+              "key": "language",
+              "direction": "desc"
+            }
+          ],
+          "cachedMovies": []
+        }
+      }
+    },
+    "dynamicAddonFetching": {
+      "__if": "inputs.addonPreset == default",
+      "__value": {
+        "__switch": "inputs.exitCondition",
+        "cases": {
+          "fast": {
+            "__switch": "services",
+            "cases": {
+              "": {
+                "enabled": true,
+                "condition": "(queryType == 'anime.series') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4       or count(resolution(cached(totalStreams), '1080p')) >= 12     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (queryType == 'anime.movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 3       or count(resolution(cached(totalStreams), '2160p')) >= 6     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (queryType == 'movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 2       or count(resolution(cached(totalStreams), '2160p')) >= 8     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2       or count(resolution(cached(totalStreams), '2160p', '1080p')) >= 15     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )"
+              }
+            },
+            "default": {
+              "enabled": true,
+              "condition": "(queryType == 'anime.series') ? (   (     count(totalStreams) >= 5     and (       ('ComeTorz' in queriedAddons ? 1 : 0)       + ('STorz' in queriedAddons ? 1 : 0)       + ('Knaben' in queriedAddons ? 1 : 0)       + ('The Pirate Bay' in queriedAddons ? 1 : 0)       + ('TsukiHime' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4       or count(resolution(cached(totalStreams), '1080p')) >= 12     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4   )   or totalTimeTaken >= 3500 )  : (queryType == 'anime.movie') ? (   (     count(totalStreams) >= 5     and (       ('ComeTorz' in queriedAddons ? 1 : 0)       + ('STorz' in queriedAddons ? 1 : 0)       + ('Knaben' in queriedAddons ? 1 : 0)       + ('The Pirate Bay' in queriedAddons ? 1 : 0)       + ('TsukiHime' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 3       or count(resolution(cached(totalStreams), '2160p')) >= 6     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 5   )   or totalTimeTaken >= 3500 )  : (queryType == 'movie') ? (   (     count(totalStreams) >= 5     and (       ('ComeTorz' in queriedAddons ? 1 : 0)       + ('STorz' in queriedAddons ? 1 : 0)       + ('Knaben' in queriedAddons ? 1 : 0)       + ('The Pirate Bay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 2       or count(resolution(cached(totalStreams), '2160p')) >= 8     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 5   )   or totalTimeTaken >= 3500 )  : (   (     count(totalStreams) >= 5     and (       ('ComeTorz' in queriedAddons ? 1 : 0)       + ('STorz' in queriedAddons ? 1 : 0)       + ('Knaben' in queriedAddons ? 1 : 0)       + ('The Pirate Bay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2       or count(resolution(cached(totalStreams), '2160p', '1080p')) >= 15     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2   )   or totalTimeTaken >= 3500 )"
+            }
+          }
+        },
+        "default": {
+          "__switch": "services",
+          "cases": {
+            "": {
+              "enabled": true,
+              "condition": "(queryType == 'anime.series') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4       or count(resolution(cached(totalStreams), '1080p')) >= 12     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (queryType == 'anime.movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 3       or count(resolution(cached(totalStreams), '2160p')) >= 6     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (queryType == 'movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 2       or count(resolution(cached(totalStreams), '2160p')) >= 8     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2       or count(resolution(cached(totalStreams), '2160p', '1080p')) >= 15     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )"
+            }
+          },
+          "default": {
+            "enabled": true,
+            "condition": "(queryType == 'anime.series') ? (   (     count(totalStreams) >= 5     and (       ('ComeTorz' in queriedAddons ? 1 : 0)       + ('STorz' in queriedAddons ? 1 : 0)       + ('Knaben' in queriedAddons ? 1 : 0)       + ('The Pirate Bay' in queriedAddons ? 1 : 0)       + ('TsukiHime' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4       or count(resolution(cached(totalStreams), '1080p')) >= 12     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4   )   or totalTimeTaken >= 5000 )  : (queryType == 'anime.movie') ? (   (     count(totalStreams) >= 5     and (       ('ComeTorz' in queriedAddons ? 1 : 0)       + ('STorz' in queriedAddons ? 1 : 0)       + ('Knaben' in queriedAddons ? 1 : 0)       + ('The Pirate Bay' in queriedAddons ? 1 : 0)       + ('TsukiHime' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 3       or count(resolution(cached(totalStreams), '2160p')) >= 6     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 5   )   or totalTimeTaken >= 5000 )  : (queryType == 'movie') ? (   (     count(totalStreams) >= 5     and (       ('ComeTorz' in queriedAddons ? 1 : 0)       + ('STorz' in queriedAddons ? 1 : 0)       + ('Knaben' in queriedAddons ? 1 : 0)       + ('The Pirate Bay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 2       or count(resolution(cached(totalStreams), '2160p')) >= 8     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 5   )   or totalTimeTaken >= 5000 )  : (   (     count(totalStreams) >= 5     and (       ('ComeTorz' in queriedAddons ? 1 : 0)       + ('STorz' in queriedAddons ? 1 : 0)       + ('Knaben' in queriedAddons ? 1 : 0)       + ('The Pirate Bay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2       or count(resolution(cached(totalStreams), '2160p', '1080p')) >= 15     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2   )   or totalTimeTaken >= 5000 )"
+          }
+        }
+      }
+    },
+    "excludedStreamExpressions": {
+      "__switch": "services",
+      "cases": {
+        "": [
+          {
+            "expression": "<SYNCED: https://git.tamtaro.de/ESE.json>",
+            "enabled": true
+          },
+          {
+            "__if": "inputs.coreFilter == 0 and inputs.coreFilter == 0",
+            "expression": "/*إعداد ستريميولاب: محرك تعبيرات البث معطل*/ []",
+            "enabled": true
+          },
+          {
+            "__if": "inputs.torboxTier == nonPro",
+            "expression": "/*حد تنزيل توربوكس الأساسي والقياسي*/ folderSize(uncached(service(streams, 'torbox')), '200GB')",
+            "enabled": true
+          },
+          {
+            "__if": "inputs.torboxTier == pro",
+            "expression": "/*حد تنزيل توربوكس برو*/ folderSize(uncached(service(streams, 'torbox')), '1TB')",
+            "enabled": true
+          },
+          {
+            "__if": "inputs.coreFilter and inputs.coreFilter != 0",
+            "expression": "/*تصفية الديبرد المخزن والتورنت والروابط المباشرة حسب الجودة والدقة*/ (1*{{inputs.coreFilter}}) !=0 ? negate( merge( perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '2160p'), 'quality', (count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '1440p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '1080p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '720p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '720p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}}))), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '576p', '480p','360p','240p','144p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), 'Unknown'), 'quality', 1*{{inputs.coreFilter}})), negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams)) : []",
+            "enabled": true
+          },
+          {
+            "__if": "inputs.coreFilter and inputs.coreFilter != 0",
+            "expression": "/*تصفية اليوزنت المخزن حسب الجودة والدقة*/ (1*{{inputs.coreFilter}}) !=0 ? negate( merge( perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '2160p'), 'quality', (count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '1440p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '1080p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '720p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '720p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}}))), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '576p', '480p','360p','240p','144p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), 'Unknown'), 'quality', 1*{{inputs.coreFilter}})), negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet'))) : []",
+            "enabled": true
+          },
+          {
+            "__if": "inputs.coreFilter and inputs.coreFilter != 0 or inputs.coreFilter and inputs.coreFilter != 0",
+            "expression": "/*تصفية المصادر غير المخزنة حسب الجودة والدقة*/ (1*max({{inputs.coreFilter}},{{inputs.coreFilter}})) !=0 ? negate( merge( perGroup(resolution(negate(seadex(streams), uncached(streams)), '2160p'), 'quality', (count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '2160p'), 'Bluray Remux', 'Bluray'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}})? ceil(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}})) : (1*max({{inputs.coreFilter}},{{inputs.coreFilter}}))) ), perGroup(resolution(negate(seadex(streams), uncached(streams)), '1440p'), 'quality', 1*max({{inputs.coreFilter}},{{inputs.coreFilter}})), perGroup(resolution(negate(seadex(streams), uncached(streams)), '1080p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}}) or count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '1080p'), 'Bluray Remux', 'Bluray'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}})) ? ceil(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}})) : (1*max({{inputs.coreFilter}},{{inputs.coreFilter}}))) ), perGroup(resolution(negate(seadex(streams), uncached(streams)), '720p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}}) or count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '1080p'), 'Bluray Remux', 'Bluray'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}})) ? ceil(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}})) : (1*max({{inputs.coreFilter}},{{inputs.coreFilter}}))) ), perGroup(resolution(negate(seadex(streams), uncached(streams)), '576p', '480p','360p','240p','144p'), 'quality', 1*max({{inputs.coreFilter}},{{inputs.coreFilter}})), perGroup(resolution(negate(seadex(streams), uncached(streams)), 'Unknown'), 'quality', 1*max({{inputs.coreFilter}},{{inputs.coreFilter}}))), negate(seadex(streams), uncached(streams))) : []",
+            "enabled": true
+          },
+          {
+            "__if": "inputs.coreFilter and inputs.coreFilter != 0 or inputs.coreFilter and inputs.coreFilter != 0",
+            "expression": "/*التصفية النهائية حسب الجودة*/ isAnime? ((count(quality(seadex(streams),'HDRip','HC HD-Rip','DVD REMUX','DVDRip','HDTV'))==0 and count(quality(resolution(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))),'2160p','1440p','1080p','720p'), 'Bluray REMUX','DVD REMUX','Bluray','WEB-DL'))> 2*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}})))) ?  quality(streams,'HDRip','HC HD-Rip','DVDRip','HDTV','CAM','TS','TC','SCR'): ((count(quality(seadex(streams),'HDRip','HC HD-Rip','DVD REMUX','DVDRip','HDTV'))>=1 or count(quality(resolution(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))),'2160p','1440p','1080p','720p'),'Bluray REMUX','Bluray','WEB-DL','WEBRip','HDRip','HC HD-Rip','DVD REMUX','DVDRip','HDTV'))> 1*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}}))))? quality(streams,'CAM','TS','TC','SCR') : [] )): (count(rseMatched(quality(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))), 'Bluray REMUX','Bluray','WEB-DL'), 'DE Bluray T1', 'DE Bluray T2', 'DE Bluray T3', 'UHD Bluray T1', 'HD Bluray T1', 'UHD Bluray T2', 'HD Bluray T2', 'UHD Bluray T3', 'HD Bluray T3', 'DE Web T1', 'DE Web T2', 'DE Web T3', 'DE Web Scene', 'Web T1', 'Web T2', 'Web T3', 'Web Scene','Asian T1','Asian T2','Asian T3')) > 1*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}}))) or count(quality(resolution(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))),'2160p','1440p','1080p','720p'),'Bluray REMUX','DVD REMUX','Bluray','WEB-DL')) > 2*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}})))) ?  quality(streams,'HDRip','HC HD-Rip','DVDRip','HDTV','SCR','TC','TS','CAM','Unknown'): ((count(quality(resolution(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))),'2160p','1440p','1080p','720p'), 'Bluray REMUX','Bluray','WEB-DL','WEBRip','HDRip','HC HD-Rip','DVD REMUX','DVDRip','HDTV')) > 1*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}}))))? quality(streams,'CAM','TS','TC','SCR') : [] )",
+            "enabled": true
+          },
+          {
+            "__if": "inputs.coreFilter and inputs.coreFilter != 0 or inputs.coreFilter and inputs.coreFilter != 0",
+            "expression": "/*التصفية النهائية حسب الدقة*/ merge(count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p')) >= min(3*max({{inputs.coreFilter}},{{inputs.coreFilter}}), 15)? merge(type(uncached(streams),'debrid'),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')), '720p','576p','480p','360p','240p','144p','Unknown')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p')) >= min(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}}), 8)? merge(type(uncached(streams),'debrid'),slice(resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')), '720p'), 2*max({{inputs.coreFilter}},{{inputs.coreFilter}})),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'576p','480p','360p','240p','144p','Unknown')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p')) > 0? merge(type(uncached(streams),'debrid'),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'576p','480p','360p','240p','144p','Unknown')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p','720p')) >= min(2.5*max({{inputs.coreFilter}},{{inputs.coreFilter}}), 12)? merge(type(uncached(streams),'debrid'),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'576p','480p','360p','240p','144p','Unknown')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p','720p')) >= min(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}}), 6)? merge(type(uncached(streams),'debrid'),slice(resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'576p','480p','Unknown'), 2*max({{inputs.coreFilter}},{{inputs.coreFilter}})),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'360p','240p','144p')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p','720p')) >0? merge(type(uncached(streams),'debrid'),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'360p','240p','144p')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p','720p','576p','480p','360p','240p','144p','Unknown')) >0? merge(type(uncached(streams),'debrid')): [])",
+            "enabled": true
+          },
+          {
+            "expression": "/*حماية المكتبة والمصادر الأخرى*/ merge(passthrough(merge(negate(merge(type(uncached(streams),'debrid'), daysSinceRelease > 180 ? quality(streams, 'CAM','TS','TC','SCR') : []), library(streams)), seadex(streams)), 'excluded', 'required', 'limit'), pin(passthrough(message(streams,'includes','🎯 Smart Play'))))",
+            "enabled": true
+          },
+          {
+            "expression": "/*تمرير أفضل مصدر عربي*/ passthrough(slice(language(merge(cached(streams), type(streams, 'p2p','http','usenet','stremio-usenet')), 'Arabic'), 0, 1), 'excluded')",
+            "enabled": true
+          },
+          {
+            "expression": "/*استبعاد ويب ريب عند توفر جودة أفضل*/ count(   quality(     streams,     'Bluray REMUX',     'Bluray',     'WEB-DL'   ) ) > 0   ? quality(streams, 'WEBRip')   : []",
+            "enabled": true
+          },
+          {
+            "expression": "/*استبعاد أسماء ملفات المقاطع الدعائية*/ keyword(streams, 'filename', 'Tlr', 'Trailer')",
+            "enabled": true
+          }
+        ]
+      },
+      "default": [
+        {
+          "expression": "<SYNCED: https://git.tamtaro.de/ESE.json>",
+          "enabled": true
+        },
+        {
+          "__if": "inputs.coreFilter == 0 and inputs.coreFilter == 0",
+          "expression": "/*إعداد ستريميولاب: محرك تعبيرات البث معطل*/ []",
+          "enabled": true
+        },
+        {
+          "__if": "inputs.torboxTier == nonPro",
+          "expression": "/*حد تنزيل توربوكس الأساسي والقياسي*/ folderSize(uncached(service(streams, 'torbox')), '200GB')",
+          "enabled": true
+        },
+        {
+          "__if": "inputs.torboxTier == pro",
+          "expression": "/*حد تنزيل توربوكس برو*/ folderSize(uncached(service(streams, 'torbox')), '1TB')",
+          "enabled": true
+        },
+        {
+          "__if": "inputs.coreFilter and inputs.coreFilter != 0",
+          "expression": "/*تصفية الديبرد المخزن والتورنت والروابط المباشرة حسب الجودة والدقة*/ (1*{{inputs.coreFilter}}) !=0 ? negate( merge( perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '2160p'), 'quality', (count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '1440p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '1080p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '720p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '720p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}}))), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '576p', '480p','360p','240p','144p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), 'Unknown'), 'quality', 1*{{inputs.coreFilter}})), negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams)) : []",
+          "enabled": true
+        },
+        {
+          "__if": "inputs.coreFilter and inputs.coreFilter != 0",
+          "expression": "/*تصفية اليوزنت المخزن حسب الجودة والدقة*/ (1*{{inputs.coreFilter}}) !=0 ? negate( merge( perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '2160p'), 'quality', (count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '1440p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '1080p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '720p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '720p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}}))), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), '576p', '480p','360p','240p','144p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet')), 'Unknown'), 'quality', 1*{{inputs.coreFilter}})), negate(merge(library(streams), seadex(streams)), type(cached(streams),'usenet','stremio-usenet'))) : []",
+          "enabled": true
+        },
+        {
+          "__if": "inputs.coreFilter and inputs.coreFilter != 0 or inputs.coreFilter and inputs.coreFilter != 0",
+          "expression": "/*تصفية المصادر غير المخزنة حسب الجودة والدقة*/ (1*max({{inputs.coreFilter}},{{inputs.coreFilter}})) !=0 ? negate( merge( perGroup(resolution(negate(seadex(streams), uncached(streams)), '2160p'), 'quality', (count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '2160p'), 'Bluray Remux', 'Bluray'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}})? ceil(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}})) : (1*max({{inputs.coreFilter}},{{inputs.coreFilter}}))) ), perGroup(resolution(negate(seadex(streams), uncached(streams)), '1440p'), 'quality', 1*max({{inputs.coreFilter}},{{inputs.coreFilter}})), perGroup(resolution(negate(seadex(streams), uncached(streams)), '1080p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}}) or count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '1080p'), 'Bluray Remux', 'Bluray'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}})) ? ceil(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}})) : (1*max({{inputs.coreFilter}},{{inputs.coreFilter}}))) ), perGroup(resolution(negate(seadex(streams), uncached(streams)), '720p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}}) or count(quality(resolution(negate(merge(library(streams), seadex(streams)), uncached(streams)), '1080p'), 'Bluray Remux', 'Bluray'))<=1*max({{inputs.coreFilter}},{{inputs.coreFilter}})) ? ceil(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}})) : (1*max({{inputs.coreFilter}},{{inputs.coreFilter}}))) ), perGroup(resolution(negate(seadex(streams), uncached(streams)), '576p', '480p','360p','240p','144p'), 'quality', 1*max({{inputs.coreFilter}},{{inputs.coreFilter}})), perGroup(resolution(negate(seadex(streams), uncached(streams)), 'Unknown'), 'quality', 1*max({{inputs.coreFilter}},{{inputs.coreFilter}}))), negate(seadex(streams), uncached(streams))) : []",
+          "enabled": true
+        },
+        {
+          "__if": "inputs.coreFilter and inputs.coreFilter != 0 or inputs.coreFilter and inputs.coreFilter != 0",
+          "expression": "/*التصفية النهائية حسب الجودة*/ isAnime? ((count(quality(seadex(streams),'HDRip','HC HD-Rip','DVD REMUX','DVDRip','HDTV'))==0 and count(quality(resolution(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))),'2160p','1440p','1080p','720p'), 'Bluray REMUX','DVD REMUX','Bluray','WEB-DL'))> 2*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}})))) ?  quality(streams,'HDRip','HC HD-Rip','DVDRip','HDTV','CAM','TS','TC','SCR'): ((count(quality(seadex(streams),'HDRip','HC HD-Rip','DVD REMUX','DVDRip','HDTV'))>=1 or count(quality(resolution(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))),'2160p','1440p','1080p','720p'),'Bluray REMUX','Bluray','WEB-DL','WEBRip','HDRip','HC HD-Rip','DVD REMUX','DVDRip','HDTV'))> 1*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}}))))? quality(streams,'CAM','TS','TC','SCR') : [] )): (count(rseMatched(quality(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))), 'Bluray REMUX','Bluray','WEB-DL'), 'DE Bluray T1', 'DE Bluray T2', 'DE Bluray T3', 'UHD Bluray T1', 'HD Bluray T1', 'UHD Bluray T2', 'HD Bluray T2', 'UHD Bluray T3', 'HD Bluray T3', 'DE Web T1', 'DE Web T2', 'DE Web T3', 'DE Web Scene', 'Web T1', 'Web T2', 'Web T3', 'Web Scene','Asian T1','Asian T2','Asian T3')) > 1*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}}))) or count(quality(resolution(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))),'2160p','1440p','1080p','720p'),'Bluray REMUX','DVD REMUX','Bluray','WEB-DL')) > 2*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}})))) ?  quality(streams,'HDRip','HC HD-Rip','DVDRip','HDTV','SCR','TC','TS','CAM','Unknown'): ((count(quality(resolution(merge(type(streams,'p2p','http','live','usenet','stremio-usenet'), cached(type(streams, 'debrid'))),'2160p','1440p','1080p','720p'), 'Bluray REMUX','Bluray','WEB-DL','WEBRip','HDRip','HC HD-Rip','DVD REMUX','DVDRip','HDTV')) > 1*(min(5, max({{inputs.coreFilter}},{{inputs.coreFilter}}))))? quality(streams,'CAM','TS','TC','SCR') : [] )",
+          "enabled": true
+        },
+        {
+          "__if": "inputs.coreFilter and inputs.coreFilter != 0 or inputs.coreFilter and inputs.coreFilter != 0",
+          "expression": "/*التصفية النهائية حسب الدقة*/ merge(count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p')) >= min(3*max({{inputs.coreFilter}},{{inputs.coreFilter}}), 15)? merge(type(uncached(streams),'debrid'),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')), '720p','576p','480p','360p','240p','144p','Unknown')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p')) >= min(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}}), 8)? merge(type(uncached(streams),'debrid'),slice(resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')), '720p'), 2*max({{inputs.coreFilter}},{{inputs.coreFilter}})),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'576p','480p','360p','240p','144p','Unknown')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p')) > 0? merge(type(uncached(streams),'debrid'),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'576p','480p','360p','240p','144p','Unknown')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p','720p')) >= min(2.5*max({{inputs.coreFilter}},{{inputs.coreFilter}}), 12)? merge(type(uncached(streams),'debrid'),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'576p','480p','360p','240p','144p','Unknown')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p','720p')) >= min(1.5*max({{inputs.coreFilter}},{{inputs.coreFilter}}), 6)? merge(type(uncached(streams),'debrid'),slice(resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'576p','480p','Unknown'), 2*max({{inputs.coreFilter}},{{inputs.coreFilter}})),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'360p','240p','144p')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p','720p')) >0? merge(type(uncached(streams),'debrid'),resolution(merge(type(streams,'usenet','stremio-usenet','http','live','p2p'), type(cached(streams),'debrid')),'360p','240p','144p')):count(resolution( merge(type(streams,'usenet','stremio-usenet','http','live','p2p'),type(cached(streams),'debrid')),'2160p','1440p','1080p','720p','576p','480p','360p','240p','144p','Unknown')) >0? merge(type(uncached(streams),'debrid')): [])",
+          "enabled": true
+        },
+        {
+          "expression": "/*حماية المكتبة والمصادر الأخرى*/ merge(passthrough(merge(negate(merge(type(uncached(streams),'debrid'), daysSinceRelease > 180 ? quality(streams, 'CAM','TS','TC','SCR') : []), library(streams)), seadex(streams)), 'excluded', 'required', 'limit'), pin(passthrough(message(streams,'includes','🎯 Smart Play'))))",
+          "enabled": true
+        },
+        {
+          "expression": "/*تمرير أفضل مصدر بصوت عربي من اليوزنت ثم الديبرد المخزن ثم الديبرد غير المخزن بخمسة سيدرز أو أكثر*/ passthrough(   slice(     language(       merge(         type(streams, 'usenet'),         cached(type(streams, 'debrid')),         seeders(uncached(type(streams, 'debrid')), 5)       ),       'Arabic'     ),     0,     1   ),   'excluded' )",
+          "enabled": true
+        },
+        {
+          "expression": "/*استبعاد أسماء ملفات المقاطع الدعائية*/ keyword(streams, 'filename', 'Tlr', 'Trailer')",
+          "enabled": true
+        },
+        {
+          "expression": "/*استبعاد ويب ريب عند توفر جودة أفضل*/ count(   quality(     streams,     'Bluray REMUX',     'Bluray',     'WEB-DL'   ) ) > 0   ? quality(streams, 'WEBRip')   : []",
+          "enabled": true
+        }
+      ]
+    },
+    "tvdbApiKey": "<optional_template_placeholder>"
+  }
+}

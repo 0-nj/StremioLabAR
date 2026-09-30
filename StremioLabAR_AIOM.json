@@ -1,0 +1,1548 @@
+{
+  "version": "3.3.2",
+  "exportedAt": "2026-09-30T04:07:01.005Z",
+  "config": {
+    "language": "en-US",
+    "addonName": "Stremio",
+    "includeAdult": false,
+    "blurThumbs": false,
+    "showPrefix": false,
+    "showMetaProviderAttribution": false,
+    "castCount": 10,
+    "displayAgeRating": false,
+    "showDisabledCatalogs": false,
+    "sfw": false,
+    "hideUnreleasedDigital": false,
+    "hideUnreleasedDigitalSearch": false,
+    "hideWatchedTrakt": true,
+    "hideWatchedAnilist": false,
+    "hideWatchedMdblist": false,
+    "providers": {
+      "movie": "tmdb",
+      "series": "tmdb",
+      "anime": "tvdb",
+      "anime_id_provider": "retain",
+      "forceAnimeForDetectedImdb": false
+    },
+    "artProviders": {
+      "movie": {
+        "poster": "meta",
+        "background": "meta",
+        "logo": "meta"
+      },
+      "series": {
+        "poster": "meta",
+        "background": "meta",
+        "logo": "meta"
+      },
+      "anime": {
+        "poster": "meta",
+        "background": "imdb",
+        "logo": "imdb"
+      },
+      "englishArtOnly": false,
+      "originalLangFallback": false
+    },
+    "tvdbSeasonType": "default",
+    "mal": {
+      "skipFiller": false,
+      "skipRecap": false,
+      "allowEpisodeMarking": false,
+      "useImdbIdForCatalogAndSearch": false
+    },
+    "tmdb": {
+      "scrapeImdb": true,
+      "forceLatinCastNames": false
+    },
+    "apiKeys": {
+      "gemini": "",
+      "tmdb": "",
+      "tvdb": "",
+      "fanart": "",
+      "rpdb": "",
+      "topPoster": "",
+      "mdblist": "",
+      "openrouter": "",
+      "traktTokenId": "",
+      "simklTokenId": "",
+      "anilistTokenId": "",
+      "customDescriptionBlurb": ""
+    },
+    "posterRatingProvider": "custom",
+    "usePosterProxy": true,
+    "mdblistWatchTracking": true,
+    "anilistWatchTracking": true,
+    "simklWatchTracking": true,
+    "publicmetadbWatchTracking": true,
+    "enableRatingPostersForLibrary": false,
+    "showRateMeButton": false,
+    "ageRating": "None",
+    "searchEnabled": true,
+    "sessionId": "",
+    "catalogSetupComplete": true,
+    "timezone": "Asia/Dubai",
+    "catalogs": [],
+    "search": {
+      "enabled": true,
+      "ai_enabled": false,
+      "ai_provider": "gemini",
+      "ai_model": "gemini-3.5-flash-lite",
+      "providers": {
+        "movie": "tmdb.search",
+        "series": "tmdb.search",
+        "anime_movie": "kitsu.search.movie",
+        "anime_series": "kitsu.search.series",
+        "people_search_movie": "tmdb.people.search",
+        "people_search_series": "tmdb.people.search"
+      },
+      "engineEnabled": {
+        "tmdb.search": true,
+        "tvdb.search": true,
+        "tvdb.collections.search": false,
+        "tvmaze.search": true,
+        "trakt.search": true,
+        "mdblist.search": true,
+        "people_search_movie": false,
+        "people_search_series": false,
+        "mal.search.movie": false,
+        "mal.search.series": false,
+        "gemini.search": false,
+        "kitsu.search.series": false,
+        "kitsu.search.movie": false
+      },
+      "searchNames": {},
+      "searchOrder": [
+        "gemini.search",
+        "movie",
+        "series",
+        "anime_movie",
+        "anime_series",
+        "tvdb.collections.search",
+        "people_search_movie",
+        "people_search_series"
+      ],
+      "ai_web_search": true,
+      "ai_trigger_keyword": "ai"
+    },
+    "streaming": [],
+    "customPosterUrlPattern": "https://btttr.cc/poster/imdb/poster-default/{imdb_id}.jpg",
+    "customBackgroundUrlPattern": "",
+    "customLogoUrlPattern": "",
+    "exclusionGenres": "",
+    "lastModified": 1790041227694,
+    "configVersion": 1790041227695,
+    "configHash": "1eb63cc8a1aa1313",
+    "customThumbnailUrlPattern": "",
+    "tags": [],
+    "hideUnreleasedShowsSearch": false,
+    "hideUnreleasedShows": false,
+    "jellyfinStreamUrl": "",
+    "jellyfinResumeSource": "auto",
+    "jellyfinAppPassword": "",
+    "jellyfinUserName": "",
+    "hideStremioCatalogs": false,
+    "collectionImagesViaCache": true,
+    "collections": [
+      {
+        "kind": "classicRow",
+        "id": "743b3279-459c-58b4-a179-5162a3ec3137",
+        "title": "Trending Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.88434",
+          "type": "series",
+          "name": "Trakt's Trending Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "f7b5bc78-9c56-559e-907f-dabc3d9400c4",
+        "title": "Watchlist: Series",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.watchlist.series",
+          "type": "series",
+          "name": "Watchlist: Series",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "4cb4f695-1c20-5d71-809b-ff6f80e4c748",
+        "title": "Recommended Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.recommended.recommended.series",
+          "type": "series",
+          "name": "Recommended Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 20,
+        "cacheTTL": 1800,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "8c88f750-a7ab-5150-b41d-96431e404190",
+        "title": "Latest Netflix Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.86751",
+          "type": "series",
+          "name": "Latest Netflix Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "028d751e-d243-5bda-8bfb-ecbacb810943",
+        "title": "Latest Disney+ Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.86758",
+          "type": "series",
+          "name": "Latest Disney+ Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "d585b9b9-d7d0-5db6-ae3c-9349b7b4833f",
+        "title": "Latest HBO Max Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.89649",
+          "type": "series",
+          "name": "Latest HBO Max Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "a31ff75e-bfcb-523e-81a5-e666cac84d5a",
+        "title": "Latest Apple TV+ Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.86756",
+          "type": "series",
+          "name": "Latest Apple TV+ Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "b6daa3aa-cf0e-55bb-8a3a-caf5e0d4bfcf",
+        "title": "Latest Amazon Prime Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.86753",
+          "type": "series",
+          "name": "Latest Amazon Prime Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "476cc2f7-b40d-59f9-840e-6b08bbf1e6ff",
+        "title": "Latest Paramount+ Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.86761",
+          "type": "series",
+          "name": "Latest Paramount+ Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "11ad9b21-8f38-564c-b996-faec896fcf88",
+        "title": "Latest Hulu Shows",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.127954",
+          "type": "series",
+          "name": "Latest Hulu Shows",
+          "genre": null,
+          "baseType": "series"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "ca466b14-5067-54e1-b0ff-f0f4b6298dcc",
+        "title": "Trending Movies",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.87667",
+          "type": "movie",
+          "name": "Trakt's Trending Movies",
+          "genre": null,
+          "baseType": "movie"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "e975fc28-0ab2-5d8c-97be-d10380d16cf7",
+        "title": "Watchlist: Movies",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.watchlist.movies",
+          "type": "movie",
+          "name": "Watchlist: Movies",
+          "genre": null,
+          "baseType": "movie"
+        },
+        "limit": 50,
+        "cacheTTL": 3600,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "classicRow",
+        "id": "ceffc4ff-605c-58e8-97a4-bb0755afd582",
+        "title": "Recommended Movies",
+        "hideTitle": false,
+        "source": {
+          "catalogId": "mdblist.recommended.recommended.movies",
+          "type": "movie",
+          "name": "Recommended Movies",
+          "genre": null,
+          "baseType": "movie"
+        },
+        "limit": 20,
+        "cacheTTL": 1800,
+        "aspectRatio": "poster",
+        "cardStyle": "medium",
+        "badges": {
+          "providers": false,
+          "ratings": true
+        },
+        "backgroundImageURL": "",
+        "numbered": false
+      },
+      {
+        "kind": "collection",
+        "id": "38696c48-5da4-584e-87be-3b2e85c6dfe1",
+        "title": "Movie Genres",
+        "hideTitle": false,
+        "backdropImageUrl": "",
+        "pinToTop": false,
+        "focusGlowEnabled": true,
+        "viewMode": "TABBED_GRID",
+        "showAllTab": true,
+        "folders": [
+          {
+            "id": "e650e464-981b-5cb2-9ca8-4fd9d40ada0c",
+            "title": "Action",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-action.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.action.2f7f15ad",
+                "type": "movie",
+                "name": "Action",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "899afe7c-ad52-5403-acd3-bbe870d8c61b",
+            "title": "Adventure",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-adventure.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.adventure.154289c5",
+                "type": "movie",
+                "name": "Adventure",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "0dd3890a-024b-5304-9492-4cbdde94e342",
+            "title": "Animation",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-animation.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.animation.55868927",
+                "type": "movie",
+                "name": "Animation",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "3805dfb7-769d-55c0-97b0-8bc0971c2194",
+            "title": "Comedy",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-comedy.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.comedy.7f25681e",
+                "type": "movie",
+                "name": "Comedy",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "7db2c395-b69a-50f1-bd3e-e2ddd31f0252",
+            "title": "Crime",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-crime.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.crime.7179905a",
+                "type": "movie",
+                "name": "Crime",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "c99e497e-876a-5dcc-8cf7-4750d8650f61",
+            "title": "Documentary",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-documentary.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.documentary.a37ba879",
+                "type": "movie",
+                "name": "Documentary",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "aa7222e9-7101-5c8c-a82d-f15fe153644b",
+            "title": "Drama",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-drama.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.drama.91bf52d9",
+                "type": "movie",
+                "name": "Drama",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "bf2e448a-8768-5716-b48d-c55f25bde2f2",
+            "title": "Fantasy",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-fantasy.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.fantasy.33eb12ef",
+                "type": "movie",
+                "name": "Fantasy",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "bac7c0a1-d1aa-504e-8822-21f303bc9e6b",
+            "title": "Historical",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-historical.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.historical.0dd40401",
+                "type": "movie",
+                "name": "Historical",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "f95cad40-a740-5a4c-9318-8bd7faff45ed",
+            "title": "Horror",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-horror.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.horror.9e8e3286",
+                "type": "movie",
+                "name": "Horror",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "0ee6621f-3c37-5ee9-867f-c60887cdf817",
+            "title": "Kids",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-kids.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.kids.bbbdf45b",
+                "type": "movie",
+                "name": "Kids",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "a430abb7-5ddc-566f-b1a7-e60707a0de14",
+            "title": "Mystery",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-mystery.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.mystery.67f6385c",
+                "type": "movie",
+                "name": "Mystery",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "56c238b5-52ae-5012-834a-076382b016ce",
+            "title": "Romance",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-romance.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.romance.a38cd691",
+                "type": "movie",
+                "name": "Romance",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "28149858-5653-5dd8-9b6b-d1264ae51bf0",
+            "title": "Sci-Fi",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-sci-fi.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.sci_fi.4b6e8f17",
+                "type": "movie",
+                "name": "Sci-Fi",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "34ee7e20-16ab-52de-89d5-a68f41a17441",
+            "title": "Thriller",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-thriller.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.thriller.755a6c2b",
+                "type": "movie",
+                "name": "Thriller",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "70631e4c-509e-5da6-a5b4-e72a1b6f8bfc",
+            "title": "War",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-war.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.war.25fb1c72",
+                "type": "movie",
+                "name": "War",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "a1e36661-db71-5364-86a0-9f073c1a285a",
+            "title": "Western",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/genres/genre-western.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.discover.movie.western.cfa4f744",
+                "type": "movie",
+                "name": "Western",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "kind": "collection",
+        "id": "95741df7-0231-5848-b367-28371dd8224e",
+        "title": "Movie Collections",
+        "hideTitle": false,
+        "backdropImageUrl": "",
+        "pinToTop": false,
+        "focusGlowEnabled": true,
+        "viewMode": "TABBED_GRID",
+        "showAllTab": true,
+        "folders": [
+          {
+            "id": "3af90e5f-6c80-5a0b-bde3-0264bb1f591f",
+            "title": "007",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-007.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.645",
+                "type": "movie",
+                "name": "James Bond Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "b0367fb8-a625-544e-98dd-584e096155b7",
+            "title": "Alien",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-alien.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.8091",
+                "type": "movie",
+                "name": "Alien Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "bf88328d-2cff-56c9-84b5-62804701b61b",
+            "title": "Avatar",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-avatar.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.87096",
+                "type": "movie",
+                "name": "Avatar Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "638115c5-229b-5223-974e-1b3db397d8a6",
+            "title": "Back to the Future",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-back-to-the-future.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.264",
+                "type": "movie",
+                "name": "Back to the Future Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "3b8ced45-45a6-5da9-a3b2-4d36df96f608",
+            "title": "Blade Runner",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-blade-runner.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.422837",
+                "type": "movie",
+                "name": "Blade Runner Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "904f1084-a61a-52b9-b899-861261d02ffc",
+            "title": "Conjuring",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-conjuring.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.313086",
+                "type": "movie",
+                "name": "The Conjuring Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "374adaf1-cde3-5fbc-95bf-da656854eff7",
+            "title": "Creed",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-creed.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.553717",
+                "type": "movie",
+                "name": "Creed Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "0fc51a67-01d5-556d-a6e3-d3af7d110031",
+            "title": "DC Comics",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-dc-comics.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "mdblist.63037",
+                "type": "movie",
+                "name": "DC Movies",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "048c5f13-2382-5dd2-9376-b9d892fe8a1d",
+            "title": "Dune",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-dune.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.726871",
+                "type": "movie",
+                "name": "Dune Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "b5c693f0-e539-5761-ba18-8494cb44cd3d",
+            "title": "The Expendables",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-expendables.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.126125",
+                "type": "movie",
+                "name": "The Expendables Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "142fa1d5-9988-54eb-a965-4df623ef4a96",
+            "title": "Fast & Furious",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-fast-furious.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.9485",
+                "type": "movie",
+                "name": "The Fast and the Furious Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "78277870-f6d6-516c-9feb-8e8a3c5d84e5",
+            "title": "Ghostbusters",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-ghostbusters.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.2980",
+                "type": "movie",
+                "name": "Ghostbusters Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "25a744c2-8e4f-57df-aada-2ab7fd6d6050",
+            "title": "The Godfather",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-godfather.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.230",
+                "type": "movie",
+                "name": "The Godfather Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "27bd5e86-8c1f-582b-b4a9-aa52cd34e477",
+            "title": "Harry Potter",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-harry-potter.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.1241",
+                "type": "movie",
+                "name": "Harry Potter Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "c4e78a9d-8aec-5987-ba93-a987b6fb13a6",
+            "title": "Indiana Jones",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-indiana-jones.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.84",
+                "type": "movie",
+                "name": "Indiana Jones Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "f6946892-2196-5fac-9145-9d0fbacdf7fb",
+            "title": "John Wick",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-john-wick.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.404609",
+                "type": "movie",
+                "name": "John Wick Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "b604d762-18dc-5598-9808-07b50fa03f4e",
+            "title": "Jurassic Park",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-jurassic-park.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.328",
+                "type": "movie",
+                "name": "Jurassic Park Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "336b737d-9ad8-599d-a1cd-fe71fcf9ca55",
+            "title": "Marvel",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-marvel.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "mdblist.127894",
+                "type": "movie",
+                "name": "Marvel Cinematic Universe",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "9177335c-6448-554e-bba0-6d83f2168c0f",
+            "title": "Matrix",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-matrix.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.2344",
+                "type": "movie",
+                "name": "The Matrix Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "52622015-1d3e-5577-a736-4f613ad1b709",
+            "title": "Mission Impossible",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-mission-impossible.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.87359",
+                "type": "movie",
+                "name": "Mission: Impossible Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "daae4ba2-88ed-5348-8d79-7d3c854f36af",
+            "title": "Pirates of the Caribbean",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-pirates-of-the-caribbean.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.295",
+                "type": "movie",
+                "name": "Pirates of the Caribbean Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "aa2c24f8-1538-51e7-a7cd-f13133164d18",
+            "title": "Planet of the Apes",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-planet-of-the-apes.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.173710",
+                "type": "movie",
+                "name": "Planet of the Apes (Reboot) Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "d7bed09c-049b-5c5e-8618-ecc9946ecffe",
+            "title": "Rambo",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-rambo.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.5039",
+                "type": "movie",
+                "name": "Rambo Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "d0dba010-b95b-5a57-84f2-075818e94114",
+            "title": "Rocky",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-rocky.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.1575",
+                "type": "movie",
+                "name": "Rocky Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "4713a953-80cd-5a80-bab5-a5a55066e7ca",
+            "title": "Scooby-Doo",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-scooby-doo.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "mdblist.94132",
+                "type": "movie",
+                "name": "Scooby-Doo Movies",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "dda6728f-6504-555e-928d-0528e9d38eef",
+            "title": "Star Trek",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-star-trek.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.151",
+                "type": "movie",
+                "name": "Star Trek: The Original Series Collection",
+                "genre": null,
+                "baseType": "movie"
+              },
+              {
+                "catalogId": "tmdb.collection.115570",
+                "type": "movie",
+                "name": "Star Trek: The Next Generation Collection",
+                "genre": null,
+                "baseType": "movie"
+              },
+              {
+                "catalogId": "tmdb.collection.115575",
+                "type": "movie",
+                "name": "Star Trek: Alternate Reality Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "899adf16-2ca3-5627-9f2f-27bd5efdf581",
+            "title": "Star Wars",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-star-wars.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.10",
+                "type": "movie",
+                "name": "Star Wars Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "7c77197c-04ba-5941-a3e3-0143edacc028",
+            "title": "The Hunger Games",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-the-hunger-games.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.131635",
+                "type": "movie",
+                "name": "The Hunger Games Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "4ce78d3a-8e83-5d06-a04b-2e2687f3477c",
+            "title": "The Lord of the Rings",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-the-lord-of-the-rings.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.119",
+                "type": "movie",
+                "name": "The Lord of the Rings Collection",
+                "genre": null,
+                "baseType": "movie"
+              },
+              {
+                "catalogId": "tmdb.collection.121938",
+                "type": "movie",
+                "name": "The Hobbit Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          },
+          {
+            "id": "2668ae3c-0cc8-5dec-8e65-5e0bc5af8853",
+            "title": "Transformers",
+            "shape": "POSTER",
+            "hideTitle": true,
+            "coverImageUrl": "https://raw.githubusercontent.com/Callandt/Fusion2-Content/main/posters/collections/collection-transformers.png",
+            "coverEmoji": "",
+            "focusGifUrl": "",
+            "focusGifEnabled": true,
+            "heroBackdropUrl": "",
+            "heroVideoUrl": "",
+            "titleLogoUrl": "",
+            "sources": [
+              {
+                "catalogId": "tmdb.collection.8650",
+                "type": "movie",
+                "name": "Transformers Collection",
+                "genre": null,
+                "baseType": "movie"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "playbackReporting": true,
+    "malWatchTracking": true,
+    "trailerAddonUrl": "https://streailer.elfhosted.com/lang=en-US&recap=true/manifest.json",
+    "recommendations": {
+      "stalled_weight": "note",
+      "refresh_hours": 336,
+      "order": "balanced",
+      "web_search": true,
+      "provider": "openrouter",
+      "reasoning_effort": "low",
+      "openrouter_model": "google/gemini-3.5-flash-lite",
+      "sources": "both",
+      "stale_after_days": 180
+    },
+    "managerAccounts": []
+  },
+  "metadata": {
+    "apiKeysExcluded": true,
+    "totalCatalogs": 0,
+    "enabledCatalogs": 0
+  }
+}
