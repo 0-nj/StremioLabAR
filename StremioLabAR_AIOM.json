@@ -3,7 +3,7 @@
   "exportedAt": "2026-09-30T04:07:01.005Z",
   "config": {
     "language": "en-US",
-    "addonName": "Stremio",
+    "addonName": "StermioLabAR",
     "includeAdult": false,
     "blurThumbs": false,
     "showPrefix": false,
@@ -19,10 +19,10 @@
     "hideWatchedMdblist": false,
     "providers": {
       "movie": "tmdb",
-      "series": "tmdb",
+      "series": "tvdb",
       "anime": "tvdb",
-      "anime_id_provider": "retain",
-      "forceAnimeForDetectedImdb": false
+      "anime_id_provider": "kitsu",
+      "forceAnimeForDetectedImdb": true
     },
     "artProviders": {
       "movie": {
@@ -48,7 +48,7 @@
       "skipFiller": false,
       "skipRecap": false,
       "allowEpisodeMarking": false,
-      "useImdbIdForCatalogAndSearch": false
+      "useImdbIdForCatalogAndSearch": true
     },
     "tmdb": {
       "scrapeImdb": true,
@@ -68,7 +68,7 @@
       "anilistTokenId": "",
       "customDescriptionBlurb": ""
     },
-    "posterRatingProvider": "custom",
+    "posterRatingProvider": "tmdb",
     "usePosterProxy": true,
     "mdblistWatchTracking": true,
     "anilistWatchTracking": true,
@@ -89,7 +89,7 @@
       "ai_model": "gemini-3.5-flash-lite",
       "providers": {
         "movie": "tmdb.search",
-        "series": "tmdb.search",
+        "series": "tvdb.search",
         "anime_movie": "kitsu.search.movie",
         "anime_series": "kitsu.search.series",
         "people_search_movie": "tmdb.people.search",
@@ -127,7 +127,7 @@
     "streaming": [],
     "customPosterUrlPattern": "https://btttr.cc/poster/imdb/poster-default/{imdb_id}.jpg",
     "customBackgroundUrlPattern": "",
-    "customLogoUrlPattern": "",
+    "customLogoUrlPattern": "https://github.com/0-nj/StremioLabAR/blob/main/StremioLabAR.jpg?raw=true",
     "exclusionGenres": "",
     "lastModified": 1790041227694,
     "configVersion": 1790041227695,
