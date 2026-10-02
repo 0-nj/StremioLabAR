@@ -51,7 +51,7 @@
         "options": [
           {
             "value": "english",
-            "label": "انجليزي"
+            "label": "الانجليزي (الموصى به)"
           },
           {
             "value": "tamtaro",
@@ -63,7 +63,7 @@
           },
           {
             "value": "arabic",
-            "label": "العربي"
+            "label": "عربي"
           },
           {
             "value": "retain",
