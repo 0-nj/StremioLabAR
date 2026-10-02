@@ -190,7 +190,8 @@
           }
         ]
       }
-    ]
+    ],
+    "sourceUrl": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/StremioLabAR_AIOS.json"
   },
   "config": {
     "preferredQualities": [
@@ -751,7 +752,7 @@
     "appliedTemplates": [
       {
         "id": "aioar.complete",
-        "version": "1.2.0",
+        "version": "1.0.2",
         "url": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/StremioLabAR_AIOS.json"
       }
     ],
