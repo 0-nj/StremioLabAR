@@ -4,8 +4,8 @@
     "name": "StremioLabAR",
     "description": "قالب عربي متكامل لـ AIOStreams",
     "source": "external",
-    "author": "D",
-    "version": "1.1.0",
+    "author": "wixct",
+    "version": "1.0.2",
     "category": "AIO",
     "tags": [
       "debrid",
@@ -63,7 +63,7 @@
           },
           {
             "value": "arabic",
-            "label": "عربي"
+            "label": "العربي"
           },
           {
             "value": "retain",
@@ -174,7 +174,7 @@
       },
       {
         "id": "exitCondition",
-        "name": "سرعة البحث عن النتائج",
+        "name": "سرعة البحث عن النتائج*",
         "description": "اختر بين الوضع الافتراضي والوضع السريع. الوضع الافتراضي يتيح مدة انتظار تصل إلى ٥ ثواني للحصول على نتائج أكثر واكتمالًا. أما الوضع السريع فيخفض الحد الأقصى للانتظار إلى ٣.٥ ثواني، مع احتمال بسيط لفقدان بعض النتائج الجيدة.",
         "type": "select",
         "required": true,
@@ -737,7 +737,7 @@
     "variants": {
       "__switch": "services",
       "cases": {
-        "": null
+        "": []
       },
       "default": [
         {
@@ -751,11 +751,14 @@
     "appliedTemplates": [
       {
         "id": "aioar.complete",
-        "version": "1.1.0",
-        "url": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/StremioLabAR-Complete-Setup.json"
+        "version": "1.2.0",
+        "url": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/StremioLabAR_AIOS.json"
       }
     ],
-    "services": null,
+    "services": {
+      "__if": "!services",
+      "__value": []
+    },
     "presets": {
       "__if": "inputs.addonPreset == default",
       "__value": {
@@ -936,6 +939,24 @@
                   "catalog"
                 ],
                 "mediaTypes": []
+              },
+              "category": "Streams"
+            },
+            {
+              "type": "custom",
+              "instanceId": "477",
+              "enabled": true,
+              "options": {
+                "name": "111477",
+                "manifestUrl": "https://st.111477.xyz/config/aHR0cHM6Ly9hLjExMTQ3Ny54eXov/manifest.json",
+                "timeout": 5000,
+                "resources": [
+                  "stream"
+                ],
+                "mediaTypes": [],
+                "libraryAddon": false,
+                "resultPassthrough": false,
+                "forceToTop": false
               },
               "category": "Streams"
             }
@@ -1617,7 +1638,7 @@
             "cases": {
               "": {
                 "enabled": true,
-                "condition": "(queryType == 'anime.series') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4       or count(resolution(cached(totalStreams), '1080p')) >= 12     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (queryType == 'anime.movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 3       or count(resolution(cached(totalStreams), '2160p')) >= 6     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (queryType == 'movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 2       or count(resolution(cached(totalStreams), '2160p')) >= 8     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2       or count(resolution(cached(totalStreams), '2160p', '1080p')) >= 15     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )"
+                "condition": "(queryType == 'anime.series') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)\n       + ('111477' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4       or count(resolution(cached(totalStreams), '1080p')) >= 12     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (queryType == 'anime.movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)\n       + ('111477' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 3       or count(resolution(cached(totalStreams), '2160p')) >= 6     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (queryType == 'movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)\n       + ('111477' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 2       or count(resolution(cached(totalStreams), '2160p')) >= 8     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )  : (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)\n       + ('111477' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2       or count(resolution(cached(totalStreams), '2160p', '1080p')) >= 15     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 1800     )   )   or totalTimeTaken >= 3500 )"
               }
             },
             "default": {
@@ -1631,7 +1652,7 @@
           "cases": {
             "": {
               "enabled": true,
-              "condition": "(queryType == 'anime.series') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4       or count(resolution(cached(totalStreams), '1080p')) >= 12     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (queryType == 'anime.movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 3       or count(resolution(cached(totalStreams), '2160p')) >= 6     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (queryType == 'movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 2       or count(resolution(cached(totalStreams), '2160p')) >= 8     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2       or count(resolution(cached(totalStreams), '2160p', '1080p')) >= 15     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )"
+              "condition": "(queryType == 'anime.series') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)\n       + ('111477' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4       or count(resolution(cached(totalStreams), '1080p')) >= 12     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1', 'Anime Web T1')) >= 4     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (queryType == 'anime.movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)\n       + ('111477' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 3       or count(resolution(cached(totalStreams), '2160p')) >= 6     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Anime BD T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (queryType == 'movie') ? (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)\n       + ('111477' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 2       or count(resolution(cached(totalStreams), '2160p')) >= 8     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Remux T1', 'Bluray T1')) >= 5     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )  : (   (     count(totalStreams) >= 5     and (       ('STorz' in queriedAddons ? 1 : 0)       + ('Meteor' in queriedAddons ? 1 : 0)       + ('Comet' in queriedAddons ? 1 : 0)       + ('HdHub' in queriedAddons ? 1 : 0)       + ('Sootio' in queriedAddons ? 1 : 0)       + ('PenguPlay' in queriedAddons ? 1 : 0)\n       + ('111477' in queriedAddons ? 1 : 0)     ) >= 3     and (       count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2       or count(resolution(cached(totalStreams), '2160p', '1080p')) >= 15     )     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or (     count(totalStreams) >= 20     and count(regexMatched(cached(totalStreams), 'Web T1', 'Remux T1')) >= 2     and (       count(type(addon(totalStreams, 'HdHub', 'PenguPlay', 'Sootio', '111477'), 'http')) >= 2       or totalTimeTaken >= 2500     )   )   or totalTimeTaken >= 5000 )"
             }
           },
           "default": {
