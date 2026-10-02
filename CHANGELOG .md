@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.4 (2026-10-02)
+
+Changes
+
+- Changed the template summary.
+- Updated the addon description.
+- Updated the English and Arabic formatters.
+
 ## 1.0.3 (2026-10-02)
 
 Changes
