@@ -2,10 +2,10 @@
   "metadata": {
     "id": "aioar.complete",
     "name": "StremioLabAR",
-    "description": "قالب عربي متكامل لـ AIOStreams",
+    "description": "قالب مصمم لدعم اللغة العربية",
     "source": "external",
     "author": "wixct",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "category": "AIO",
     "tags": [
       "debrid",
@@ -414,9 +414,9 @@
     "addonDescription": {
       "__switch": "services",
       "cases": {
-        "": "تم تعديل قالب تمتارو وتحسينه ليتناسب مع المصادر العربية، عن طريق تمرير المصادر التي تحتوي على صوت عربي أو ترجمة عربية عند توفرها، مع تحسين التصفية، وترتيب الأولويات، وآلية الانتقال إلى الخيارات البديلة عند الحاجة."
+        "": "قالب **ستريميولاب** هو قالب عربي متكامل لـ **AIOStreams**، مصمم لتسهيل الإعداد وتحسين عرض المصادر التي تحتوي على دبلجة او ترجمة عربية."
       },
-      "default": "تم تعديل إعدادات تمتارو وتحسينها خصيصًا لتناسب البثوث العربية، سواء من ناحية الصوت أو الترجمة، مع تحسين التصفية، وترتيب الأولويات، وآلية الانتقال إلى الخيارات البديلة عند الحاجة."
+      "default": "قالب **ستريميولاب** هو قالب عربي متكامل لـ **AIOStreams**، مصمم لتسهيل الإعداد وتحسين عرض المصادر التي تحتوي على دبلجة او ترجمة عربية."
     },
     "addonLogo": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/StremioLabAR.jpg",
     "excludedResolutions": [],
@@ -752,7 +752,7 @@
     "appliedTemplates": [
       {
         "id": "aioar.complete",
-        "version": "1.0.2",
+        "version": "1.0.4",
         "url": "https://raw.githubusercontent.com/0-nj/StremioLabAR/refs/heads/main/StremioLabAR_AIOS.json"
       }
     ],
