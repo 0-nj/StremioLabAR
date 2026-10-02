@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.3 (2026-10-02)
+
+Changes
+
+- Removed the 111477 addon from the P2P and HTTP profile and its exit conditions.
+- Fixed the default search option so it selects the Default Addon Fetching Strategy instead of Dynamic. The fast option remains Dynamic with a 3.5-second exit condition.
+- Updated the English and Arabic formatters.
+
 ## 1.0.2 (2026-10-02)
 
 New
