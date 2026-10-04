@@ -5,7 +5,7 @@
     "description": "‏يجمع القالب إعدادات البحث والتصفية والترتيب في خطوات مبسطة، مع خيارات تناسب الخدمات والإضافات التي تستخدمها.‏\n\n‏المميزات:‏\n‏• استعمال روابط فيدهن وتامتارو.‏\n‏• أكثر من خيار للإضافات وتنسيق عرض النتائج.‏\n‏• شرح وإعداد مبسط باللغة العربية.‏\n‏• إعطاء الأولوية في التصفية للمصادر التي تحتوي على صوت أو ترجمة عربية عند توفرها.‏\n‏• خيارات لترتيب النتائج حسب الجودة أو الدقة أو الترجمة.‏\n‏• دعم الديبرد واليوزنت والتورنت والروابط المباشرة.‏\n‏• خيارات للتحكم في سرعة البحث وعدد النتائج.‏\n‏• مصادر بديلة عند تعطل خدمة الديبرد، حسب إعداداتك.‏",
     "source": "external",
     "author": "wixct",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "category": "AIO",
     "tags": [
       "debrid",
@@ -51,7 +51,7 @@
         "options": [
           {
             "value": "english",
-            "label": "الانجليزي (الموصى به)"
+            "label": "انقليزي (الموصى به)"
           },
           {
             "value": "tamtaro",
@@ -73,15 +73,15 @@
       },
       {
         "id": "addonPreset",
-        "name": "إعداد الإضافات",
-        "description": "الإعداد الموصى به يثبت إضافات القالب، اختر استخدام إضافاتك الحالية إذا كنت قد خصصتها ولا تريد استبدالها",
+        "name": "الإضافات",
+        "description": "إضافات القالب تثبت الإضافات المحددة لهذا الوضع، اختر استخدام إضافاتك الحالية إذا كنت قد خصصتها ولا تريد استبدالها",
         "type": "select",
         "required": true,
         "default": "default",
         "options": [
           {
             "value": "default",
-            "label": "الإضافات الموصى بها"
+            "label": "إضافات القالب"
           },
           {
             "value": "none",
@@ -91,7 +91,7 @@
       },
       {
         "id": "subtitleAddons",
-        "name": "إضافات الترجمة",
+        "name": "أضف إضافات الترجمة",
         "description": "اختر نعم لإضافة أوبن سبتايتلز وسب دل وسب سورس، أو لا لعدم تحميل إضافات الترجمة",
         "type": "select",
         "required": true,
@@ -145,7 +145,7 @@
       {
         "id": "coreFilter",
         "name": "محرك البحث: عدد النتائج",
-        "description": "القيمة الافتراضية هي ٣، وتعطي تقريبًا من ٣ إلى ٥ نتائج لكل دقة وجودة، أي ما يقارب ١٥ إلى ٢٠ مصدرًا إجمالًا، أدخل صفر لتعطيله",
+        "description": "القيمة الافتراضية هي ٣، وتعطي تقريبًا من ٣ إلى ٥ نتائج لكل دقة وجودة، أي ما يقارب ١٥ إلى ٢٠ مصدرًا إجمالًا. نتائج اليوزنت منفصلة، وستعطيك من ١٥ إلى ٢٠ مصدرًا أيضًا. أدخل صفر لتعطيله",
         "type": "number",
         "required": true,
         "default": 3
@@ -187,6 +187,25 @@
           {
             "value": "fast",
             "label": "السريع: بحث ديناميكي بحد ٣.٥ ثواني"
+          }
+        ]
+      },
+      {
+        "__if": "services.easynews or services.nzbdav or services.altmount or services.stremio_nntp or services.stremthru_newz or services.aiostreams",
+        "id": "protectNZBatlas",
+        "name": "حماية نتائج اندكسر اطلس من التصفية",
+        "description": "اختر نعم لتمرير أول نتيجتين من اندكسر اطلس، أو لا لترك التصفية المعتادة دون إضافة شرط. ملاحظة: سمّ الاندكسر باسم NZBatlas بالضبط حتى تتم مطابقة نتائجه.",
+        "type": "select",
+        "required": false,
+        "default": "yes",
+        "options": [
+          {
+            "value": "yes",
+            "label": "نعم"
+          },
+          {
+            "value": "no",
+            "label": "لا"
           }
         ]
       }
@@ -545,7 +564,7 @@
       "cases": {
         "": [
           {
-            "expression": "/*تمرير اللغة العربية*/ passthrough(language(streams, 'Arabic'), 'language')",
+            "expression": "/*تمرير وحماية الصوت المدبلج للغة العربية عند التصفيه*/ passthrough(language(streams, 'Arabic'), 'language')",
             "enabled": true
           },
           {
@@ -560,7 +579,7 @@
       },
       "default": [
         {
-          "expression": "/*تمرير لغة الصوت العربية*/ passthrough(language(streams, 'Arabic'), 'language')",
+          "expression": "/*تمرير وحماية الصوت المدبلج للغة العربية عند التصفيه*/ passthrough(language(streams, 'Arabic'), 'language')",
           "enabled": true
         },
         {
@@ -569,6 +588,11 @@
         },
         {
           "expression": "<SYNCED: https://git.tamtaro.de/ISE.json>",
+          "enabled": true
+        },
+        {
+          "__if": "services.easynews and inputs.protectNZBatlas == yes or services.nzbdav and inputs.protectNZBatlas == yes or services.altmount and inputs.protectNZBatlas == yes or services.stremio_nntp and inputs.protectNZBatlas == yes or services.stremthru_newz and inputs.protectNZBatlas == yes or services.aiostreams and inputs.protectNZBatlas == yes",
+          "expression": "/*تمرير أول نتيجتين من اندكسر اطلس مع الحماية من التصفية*/ slice(passthrough(addon(streams, 'NZBatlas'), 'title', 'excluded', 'dedup', 'language', 'limit'), 0, 2)",
           "enabled": true
         }
       ]
@@ -784,36 +808,21 @@
               "category": "Streams"
             },
             {
-              "type": "meteor",
-              "instanceId": "064",
+              "__if": "inputs.penguPlayUrlNoDebrid",
+              "type": "penguplay",
+              "instanceId": "13d",
               "enabled": true,
               "options": {
-                "name": "Meteor",
+                "name": "PenguPlay",
+                "manifestUrl": "{{inputs.penguPlayUrlNoDebrid}}",
                 "timeout": 5000,
                 "resources": [
-                  "stream"
+                  "stream",
+                  "subtitles",
+                  "meta",
+                  "catalog"
                 ],
-                "includeP2P": true,
-                "removeTrash": false,
-                "useMultipleInstances": false,
                 "mediaTypes": []
-              },
-              "category": "Streams"
-            },
-            {
-              "type": "comet",
-              "instanceId": "b0f",
-              "enabled": true,
-              "options": {
-                "name": "Comet",
-                "timeout": 5000,
-                "resources": [
-                  "stream"
-                ],
-                "includeP2P": true,
-                "removeTrash": false,
-                "mediaTypes": [],
-                "url": ""
               },
               "category": "Streams"
             },
@@ -861,6 +870,40 @@
               "category": "Streams"
             },
             {
+              "type": "meteor",
+              "instanceId": "064",
+              "enabled": true,
+              "options": {
+                "name": "Meteor",
+                "timeout": 5000,
+                "resources": [
+                  "stream"
+                ],
+                "includeP2P": true,
+                "removeTrash": false,
+                "useMultipleInstances": false,
+                "mediaTypes": []
+              },
+              "category": "Streams"
+            },
+            {
+              "type": "comet",
+              "instanceId": "b0f",
+              "enabled": true,
+              "options": {
+                "name": "Comet",
+                "timeout": 5000,
+                "resources": [
+                  "stream"
+                ],
+                "includeP2P": true,
+                "removeTrash": false,
+                "mediaTypes": [],
+                "url": ""
+              },
+              "category": "Streams"
+            },
+            {
               "type": "opensubtitles-v3-plus",
               "instanceId": "262",
               "enabled": true,
@@ -874,8 +917,8 @@
                   "ar"
                 ],
                 "sources": "all",
-                "includeAiTranslated": false,
-                "movieHashPlusAutoAdjustment": false
+                "includeAiTranslated": true,
+                "movieHashPlusAutoAdjustment": true
               },
               "category": "SUBS",
               "__if": "inputs.subtitleAddons == yes"
@@ -923,25 +966,6 @@
               },
               "category": "SUBS",
               "__if": "inputs.subtitleAddons == yes"
-            },
-            {
-              "__if": "inputs.penguPlayUrlNoDebrid",
-              "type": "penguplay",
-              "instanceId": "13d",
-              "enabled": true,
-              "options": {
-                "name": "PenguPlay",
-                "manifestUrl": "{{inputs.penguPlayUrlNoDebrid}}",
-                "timeout": 5000,
-                "resources": [
-                  "stream",
-                  "subtitles",
-                  "meta",
-                  "catalog"
-                ],
-                "mediaTypes": []
-              },
-              "category": "Streams"
             }
           ]
         },
@@ -1223,8 +1247,8 @@
             "id": "custom",
             "definitions": {
               "custom": {
-                "name": "{stream.resolution::exists[\"{stream.resolution::replace('2160p','فوركي')::replace('1440p','تو كي')::replace('1080p','فل اتش دي')::replace('720p','اتش دي')::replace('576p','اس دي')::replace('480p','اس دي')::replace('360p','جودة منخفضة')::replace('240p','جودة منخفضة')::replace('144p','جودة منخفضة')}\"||\"الدقة غير معروفة\"]}{stream.quality::in('Unknown','unknown')[\"\"||\"{stream.quality::exists[\" {stream.quality::replace('BluRay REMUX','بلوراي ريموكس')::replace('Bluray REMUX','بلوراي ريموكس')::replace('Bluray Remux','بلوراي ريموكس')::replace('BluRay Remux','بلوراي ريموكس')::replace('REMUX','ريموكس')::replace('Remux','ريموكس')::replace('Blu-ray','بلوراي')::replace('BluRay','بلوراي')::replace('Bluray','بلوراي')::replace('WEB-DL','ويب ديل')::replace('Web-dl','ويب ديل')::replace('WEBRip','ويب ريب')::replace('Webrip','ويب ريب')::replace('HDrip','اتش دي ريب')::replace('HDTV','اتش دي تي في')::replace('CAM','كام')::replace('Cam','كام')}\"||\"\"]}\"]}{stream.type::exists[\" ⁽{stream.type::replace('p2p','تورنت')::replace('usenet','يوزنت')::replace('http','مباشر')::replace('debrid','ديبرد')}{service.cached::exists[\"{service.cached::istrue[\"⚡️\"||\"⏳\"]}\"||\"\"]}⁾\"||\"\"]}{stream.nSeScore::>5[\" {stream.nSeScore::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')}٪؜\"||\"\"]}",
-                "description": "{metadata.episodeTitle::exists[\"✏️ ⁧الحلقة: {metadata.episodeTitle::truncate(40)} S{metadata.season}E{metadata.episode}⁩ | 🗓️ ⁧سنة الإنتاج: {metadata.year::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')}⁩\"||\"✏️ ⁧الفلم: {metadata.title::truncate(40)}⁩ | 🗓️ ⁧سنة الإنتاج: {metadata.year::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')}⁩\"]}\\n⁧{stream.quality::in('Unknown','unknown')[\"الجودة: غير معروفة ⚠️\"||\"{stream.quality::exists[\"الجودة: {stream.quality::replace('BluRay REMUX','بلوراي ريمكس')::replace('Bluray REMUX','بلوراي ريمكس')::replace('Bluray Remux','بلوراي ريمكس')::replace('REMUX','ريمكس')::replace('Remux','ريمكس')::replace('Blu-ray','بلوراي')::replace('BluRay','بلوراي')::replace('Bluray','بلوراي')::replace('WEB-DL','ويب ديل')::replace('Web-dl','ويب ديل')::replace('WEBRip','ويب ريب')::replace('Webrip','ويب ريب')::replace('HDrip','اتش دي ريب')::replace('HDTV','اتش دي تي في')::replace('CAM','كام')::replace('Cam','كام')} {stream.quality::in('BluRay REMUX','Bluray REMUX','Bluray Remux','REMUX','Remux','Blu-ray','BluRay','Bluray')[\"🎥\"||\"📺\"]}\"||\"الجودة: غير معروفة ⚠️\"]}\"]}⁩ | ⁧{stream.resolution::in('Unknown','unknown')[\"الدقة: غير معروفة ⚠️\"||\"{stream.resolution::exists[\"الدقة: {stream.resolution::replace('2160p','فوركي')::replace('1440p','تو كي')::replace('1080p','فل اتش دي')::replace('720p','اتش دي')::replace('576p','اس دي')::replace('480p','اس دي')} {stream.resolution::=2160p[\"🖥️\"||\"💻\"]}\"||\"الدقة: غير معروفة ⚠️\"]}\"]}⁩\\n⁧{stream.type::=p2p[\"السيدرز: {stream.seeders::exists[\"{stream.seeders::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 🌱\"||\"غير معروف\"]}\"||\"الخدمة: {stream.type::=http[\"بدون خدمة 🔴\"||\"{service.name::exists[\"{service.name::replace('AllDebrid','اول ديبرد')::replace('RealDebrid','ريل ديبرد')::replace('Real-Debrid','ريل ديبرد')::replace('TorBox','توربوكس')::replace('OffCloud','اوف كلاود')::replace('Premiumize','بريميومايز')}\"||\"بدون خدمة\"]}{service.id::=torbox[\" 🟢\"||\"\"]}{service.id::=alldebrid[\" ⚫️\"||\"\"]}{service.id::=realdebrid[\" ⚫️\"||\"\"]}{service.id::=offcloud[\" 🔵\"||\"\"]}{service.id::=premiumize[\" 🔴\"||\"\"]}{service.id::=easynews[\" 🔵\"||\"\"]}{service.id::=aiostreams[\" ⚫️\"||\"\"]}\"]}\"]}⁩ | ⁧الإضافة: {addon.name::exists[\"{addon.name::replace('The Pirate Bay','ذا بايرت باي')::replace('ComeTorz','كوميتورز')::replace('Cometoz','كوميتووز')::replace('PenguPlay','بينقو بلاي')::replace('HDHub','اتش دي هب')::replace('HdHub','اتش دي هب')::replace('HD Hub','اتش دي هب')::replace('Library','المكتبة')::replace('Knaben','كانيبن')::replace('Meteor','ميتيور')::replace('Sootio','سوتيو')::replace('sTorz','تورز')::replace('STorz','تورز')::replace('Torz','تورز')::replace('Comet','كوميت')::replace('comet','كوميت')::replace('aradeb','عردب')}\"||\"غير معروفة\"]} 🧩⁩\\n{stream.size::>0[\"⁧الحجم: {stream.size::sbytes::replace('GiB','قيقا')::replace('GB','قيقا')::replace('MiB','ميقا')::replace('MB','ميقا')::replace('TiB','تيرا')::replace('TB','تيرا')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 💾⁩\"||\"{stream.folderSize::>0[\"⁧الحجم: {stream.folderSize::sbytes::replace('GiB','قيقا')::replace('GB','قيقا')::replace('MiB','ميقا')::replace('MB','ميقا')::replace('TiB','تيرا')::replace('TB','تيرا')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 💾⁩\"||\"\"]}\"]}{? | ⁧البت ريت: {stream.bitrate::sbitrate::replace('Gbps','غيغابت')::replace('Mbps','ميغابت')::replace('Kbps','كيلوبت')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 📶⁩ ?}{stream.duration::>0[\" | ⁧المدة: {stream.duration::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"{metadata.episodeRuntime::>0[\" | ⁧المدة: {metadata.episodeRuntime::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"{metadata.runtime::>0[\" | ⁧المدة: {metadata.runtime::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"\"]}\"]}\"]}\\n{stream.audioTags::exists[\"⁧الصوت: {stream.audioTags::in('Atmos','DD+','DD','TrueHD','EAC3','AC3')[\"دولبي {stream.audioTags::keep('Atmos','DD+','DD','TrueHD','EAC3','AC3')::lsort::replace('Atmos','أتموس')::replace('TrueHD','ترو إتش دي')::replace('EAC3','ديجيتال بلس')::replace('AC3','ديجيتال')::replace('DD+','ديجيتال بلس')::replace('DD','ديجيتال')::unique::join('، ')}{stream.audioTags::remove('Atmos','DD+','DD','TrueHD','EAC3','AC3')::exists[\"، \"||\"\"]}\"||\"\"]}{stream.audioTags::remove('Atmos','DD+','DD','TrueHD','EAC3','AC3')::lsort::replace('DTS-HD MA','دي تي إس إتش دي ماستر أوديو')::replace('DTS-HD','دي تي إس إتش دي')::replace('DTS-ES','دي تي إس إي إس')::replace('DTS:X','دي تي إس إكس')::replace('DTS','دي تي إس')::replace('OPUS','أوبوس')::replace('FLAC','فلاك')::replace('AAC','إيه إيه سي')::replace('LPCM','إل بي سي إم')::replace('PCM','بي سي إم')::replace('Unknown','غير معروف')::unique::join('، ')} 🔊⁩\"||\"⁧الصوت: غير معروف 🔊⁩\"]} | {stream.audioChannels::exists[\"⁧القنوات: {stream.audioChannels::join('، ')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')::replace('Unknown','غير معروفة')} 🎚️⁩\"||\"⁧القنوات: غير معروفة 🎚️⁩\"]}\\n{stream.encode::exists[\"⁧الترميز: {stream.encode::replace('HEVC','إتش إي في سي')::replace('H.265','إتش ٢٦٥')::replace('H265','إتش ٢٦٥')::replace('x265','إكس ٢٦٥')::replace('AVC','إيه في سي')::replace('H.264','إتش ٢٦٤')::replace('H264','إتش ٢٦٤')::replace('x264','إكس ٢٦٤')::replace('AV1','إيه في ون')::replace('VP9','في بي ٩')::replace('VP8','في بي ٨')::replace('MPEG-4','إم بي إي جي ٤')::replace('MPEG-2','إم بي إي جي ٢')::replace('VC-1','في سي ١')::replace('XviD','إكس فيد')::replace('DivX','ديف إكس')::replace('Unknown','غير معروف')} 🎞️⁩\"||\"⁧الترميز: غير معروف 🎞️⁩\"]} | {stream.visualTags::exists[\"⁧الصورة: {stream.visualTags::in('HDR10+','HDR10P','HDR10PLUS')[\"إتش دي آر ١٠ بلس{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"{stream.visualTags::in('HDR10')[\"إتش دي آر ١٠{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"{stream.visualTags::in('HDR')[\"إتش دي آر{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"\"]}\"]}\"]}{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::replace('HDR+DV','إتش دي آر مع دولبي فيجن')::replace('DV Only','دولبي فيجن فقط')::replace('HDR Only','إتش دي آر فقط')::replace('DV','دولبي فيجن')::replace('HLG','إتش إل جي')::replace('10bit','١٠ بت')::replace('10-bit','١٠ بت')::replace('SDR','إس دي آر')::replace('IMAX','آيماكس')::replace('AI','ذكاء اصطناعي')::replace('Upscaled','مرفوعة الدقة')::replace('3D','ثلاثي الأبعاد')::replace('H-OU','ثلاثي الأبعاد نصف علوي وسفلي')::replace('H-SBS','ثلاثي الأبعاد نصف جانبي')::replace('Unknown','غير معروفة')::unique::sort::join('، ')} 📷⁩\"||\"⁧الصورة: غير معروفة 📷⁩\"]}\\n⁧لغة الصوت: {metadata.isAnime::istrue[\"اليابانية 🇯🇵\"||\"{stream.uLanguages::exists[\"{stream.uLanguages::in('arabic')[\"{stream.uLanguages::in('english')[\"العربية 🇸🇦 والإنجليزية 🇺🇸\"||\"العربية 🇸🇦\"]}\"||\"{stream.uLanguages::in('english')[\"الإنجليزية 🇺🇸\"||\"{stream.uLanguages::first::lower::replace('dual audio','غير معروفة ❓')::replace('dual','غير معروفة ❓')::replace('multilingual','متعددة 🌎')::replace('multiple','متعددة 🌎')::replace('multi','متعددة 🌎')::replace('dubbed','مدبلجة')::replace('dub','مدبلجة')::replace('arabic','العربية')::replace('english','الإنجليزية')::replace('japanese','اليابانية')::replace('french','الفرنسية')::replace('spanish','الإسبانية')::replace('german','الألمانية')::replace('italian','الإيطالية')::replace('korean','الكورية')::replace('chinese','الصينية')::replace('turkish','التركية')::replace('dutch','الهولندية')::replace('swedish','السويدية')::replace('norwegian','النرويجية')::replace('danish','الدنماركية')::replace('finnish','الفنلندية')::replace('polish','البولندية')}{stream.uLanguages::first::in('dual','dual audio','multi','multiple','multilingual','dubbed','dub')[\"\"||\" {stream.uLanguages::first::languageEmoji}\"]}\"]}\"]}\"||\"{stream.languages::exists[\"{stream.languages::first::in('multi','multiple','multilingual')[\"متعددة 🌎\"||\"{stream.languages::first::in('dubbed','dub')[\"مدبلجة\"||\"غير معروفة ❓\"]}\"]}\"||\"{metadata.originalLanguage::exists[\"{metadata.originalLanguage::in('english','en')[\"الإنجليزية 🇺🇸\"||\"{metadata.originalLanguage::lower::replace('arabic','العربية')::replace('english','الإنجليزية')::replace('japanese','اليابانية')::replace('french','الفرنسية')::replace('spanish','الإسبانية')::replace('german','الألمانية')::replace('italian','الإيطالية')::replace('korean','الكورية')::replace('chinese','الصينية')::replace('turkish','التركية')::replace('dutch','الهولندية')::replace('swedish','السويدية')::replace('norwegian','النرويجية')::replace('danish','الدنماركية')::replace('finnish','الفنلندية')::replace('polish','البولندية')} {metadata.originalLanguage::languageEmoji}\"]}\"||\"غير معروفة ❓\"]}\"]}\"]}\"]}⁩ | ⁧{stream.subtitles::in('arabic')[\"الترجمة العربية متوفرة ✅\"||\"{stream.subtitles::exists[\"الترجمة العربية غير متوفرة ❌\"||\"{stream.subbed::istrue::and::stream.languages::in('arabic')[\"احتمالية وجود ترجمة عربية ❓\"||\"الترجمة العربية غير متوفرة ❌\"]}\"]}\"]}⁩"
+                "name": "{stream.resolution::exists[\"{stream.resolution::replace('2160p','فوركي')::replace('1440p','تو كي')::replace('1080p','فل اتش دي')::replace('720p','اتش دي')::replace('576p','اس دي')::replace('480p','اس دي')::replace('360p','جودة منخفضة')::replace('240p','جودة منخفضة')::replace('144p','جودة منخفضة')}\"||\"الدقة غير معروفة\"]}{stream.quality::in('Unknown','unknown')[\"\"||\"{stream.quality::exists[\" {stream.quality::replace('BluRay REMUX','ريموكس')::replace('Bluray REMUX','ريموكس')::replace('Bluray Remux','ريموكس')::replace('BluRay Remux','ريموكس')::replace('REMUX','ريموكس')::replace('Remux','ريموكس')::replace('Blu-ray','بلوراي')::replace('BluRay','بلوراي')::replace('Bluray','بلوراي')::replace('WEB-DL','ويب ديل')::replace('Web-dl','ويب ديل')::replace('WEBRip','ويب ريب')::replace('Webrip','ويب ريب')::replace('HDrip','اتش دي ريب')::replace('DVDRip','ديفي دي ريب')::replace('DVDrip','ديفي دي ريب')::replace('Dvdrip','ديفي دي ريب')::replace('dvdrip','ديفي دي ريب')::replace('HDTV','اتش دي تي في')::replace('CAM','كام')::replace('Cam','كام')}\"||\"\"]}\"]}{stream.type::exists[\" ⁽{stream.type::replace('p2p','تورنت')::replace('usenet','يوزنت')::replace('http','مباشر')::replace('debrid','ديبرد')}{service.cached::exists[\"{service.cached::istrue[\"⚡️\"||\"⏳\"]}\"||\"\"]}⁾\"||\"\"]}{stream.nSeScore::>5[\" {stream.nSeScore::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')}٪؜\"||\"\"]}",
+                "description": "{metadata.season::exists[\"✏️ ⁧المسلسل: {metadata.title::truncate(40)} S{metadata.season}E{metadata.episode}⁩\"||\"✏️ ⁧الفلم: {metadata.title::truncate(40)}⁩\"]} | 🗓️ ⁧سنة الإنتاج: {metadata.year::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')}⁩\\n⁧{stream.quality::in('Unknown','unknown')[\"الجودة: غير معروفة ⚠️\"||\"{stream.quality::exists[\"الجودة: {stream.quality::replace('BluRay REMUX','ريموكس')::replace('Bluray REMUX','ريموكس')::replace('Bluray Remux','ريموكس')::replace('REMUX','ريموكس')::replace('Remux','ريموكس')::replace('Blu-ray','بلوراي')::replace('BluRay','بلوراي')::replace('Bluray','بلوراي')::replace('WEB-DL','ويب ديل')::replace('Web-dl','ويب ديل')::replace('WEBRip','ويب ريب')::replace('Webrip','ويب ريب')::replace('HDrip','اتش دي ريب')::replace('DVDRip','ديفي دي ريب')::replace('DVDrip','ديفي دي ريب')::replace('Dvdrip','ديفي دي ريب')::replace('dvdrip','ديفي دي ريب')::replace('HDTV','اتش دي تي في')::replace('CAM','كام')::replace('Cam','كام')} {stream.quality::in('BluRay REMUX','Bluray REMUX','Bluray Remux','REMUX','Remux','Blu-ray','BluRay','Bluray')[\"🎥\"||\"📺\"]}\"||\"الجودة: غير معروفة ⚠️\"]}\"]}⁩ | ⁧{stream.resolution::in('Unknown','unknown')[\"الدقة: غير معروفة ⚠️\"||\"{stream.resolution::exists[\"الدقة: {stream.resolution::replace('2160p','فوركي')::replace('1440p','تو كي')::replace('1080p','فل اتش دي')::replace('720p','اتش دي')::replace('576p','اس دي')::replace('480p','اس دي')} {stream.resolution::=2160p[\"🖥️\"||\"💻\"]}\"||\"الدقة: غير معروفة ⚠️\"]}\"]}⁩\\n⁧{stream.type::=p2p[\"السيدرز: {stream.seeders::exists[\"{stream.seeders::string::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 🌱\"||\"غير معروف\"]}\"||\"الخدمة: {stream.type::=http[\"بدون خدمة 🔴\"||\"{service.name::exists[\"{service.name::replace('AllDebrid','اول ديبرد')::replace('RealDebrid','ريل ديبرد')::replace('Real-Debrid','ريل ديبرد')::replace('TorBox','توربوكس')::replace('OffCloud','اوف كلاود')::replace('Premiumize','بريميومايز')}\"||\"بدون خدمة\"]}{service.id::=torbox[\" 🟢\"||\"\"]}{service.id::=alldebrid[\" ⚫️\"||\"\"]}{service.id::=realdebrid[\" ⚫️\"||\"\"]}{service.id::=offcloud[\" 🔵\"||\"\"]}{service.id::=premiumize[\" 🔴\"||\"\"]}{service.id::=easynews[\" 🔵\"||\"\"]}{service.id::=aiostreams[\" ⚫️\"||\"\"]}\"]}\"]}⁩ | ⁧الإضافة: {addon.name::exists[\"{addon.name::replace('The Pirate Bay','ذا بايرت باي')::replace('ComeTorz','كوميتورز')::replace('Cometoz','كوميتووز')::replace('PenguPlay','بينقو بلاي')::replace('HDHub','اتش دي هب')::replace('HdHub','اتش دي هب')::replace('HD Hub','اتش دي هب')::replace('Library','المكتبة')::replace('Knaben','كانيبن')::replace('Meteor','ميتيور')::replace('Sootio','سوتيو')::replace('sTorz','تورز')::replace('STorz','تورز')::replace('Torz','تورز')::replace('Comet','كوميت')::replace('comet','كوميت')::replace('aradeb','عردب')}\"||\"غير معروفة\"]} 🧩⁩\\n{stream.size::>0[\"⁧الحجم: {stream.size::sbytes::replace('GiB','قيقا')::replace('GB','قيقا')::replace('MiB','ميقا')::replace('MB','ميقا')::replace('TiB','تيرا')::replace('TB','تيرا')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 💾⁩\"||\"{stream.folderSize::>0[\"⁧الحجم: {stream.folderSize::sbytes::replace('GiB','قيقا')::replace('GB','قيقا')::replace('MiB','ميقا')::replace('MB','ميقا')::replace('TiB','تيرا')::replace('TB','تيرا')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 💾⁩\"||\"\"]}\"]}{? | ⁧البت ريت: {stream.bitrate::sbitrate::replace('Gbps','غيغابت')::replace('Mbps','ميغابت')::replace('Kbps','كيلوبت')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} 📶⁩ ?}{stream.duration::>0[\" | ⁧المدة: {stream.duration::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"{metadata.episodeRuntime::>0[\" | ⁧المدة: {metadata.episodeRuntime::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"{metadata.runtime::>0[\" | ⁧المدة: {metadata.runtime::time('%-H:%M')::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')} ⏱️⁩\"||\"\"]}\"]}\"]}\\n{stream.audioTags::exists[\"⁧الصوت: {stream.audioTags::in('Atmos','DD+','DD','TrueHD','EAC3','AC3')[\"دولبي {stream.audioTags::keep('Atmos','DD+','DD','TrueHD','EAC3','AC3')::lsort::replace('Atmos','أتموس')::replace('TrueHD','ترو إتش دي')::replace('EAC3','ديجيتال بلس')::replace('AC3','ديجيتال')::replace('DD+','ديجيتال بلس')::replace('DD','ديجيتال')::unique::join('، ')}{stream.audioTags::remove('Atmos','DD+','DD','TrueHD','EAC3','AC3')::exists[\"، \"||\"\"]}\"||\"\"]}{stream.audioTags::remove('Atmos','DD+','DD','TrueHD','EAC3','AC3')::lsort::replace('DTS-HD MA','دي تي إس إتش دي ماستر أوديو')::replace('DTS-HD','دي تي إس إتش دي')::replace('DTS-ES','دي تي إس إي إس')::replace('DTS:X','دي تي إس إكس')::replace('DTS','دي تي إس')::replace('OPUS','أوبوس')::replace('FLAC','فلاك')::replace('AAC','إيه إيه سي')::replace('LPCM','إل بي سي إم')::replace('PCM','بي سي إم')::replace('Unknown','غير معروف')::unique::join('، ')} 🔊⁩\"||\"⁧الصوت: غير معروف 🔊⁩\"]} | {stream.audioChannels::exists[\"⁧القنوات: {stream.audioChannels::sort::last::replace('0','٠')::replace('1','١')::replace('2','٢')::replace('3','٣')::replace('4','٤')::replace('5','٥')::replace('6','٦')::replace('7','٧')::replace('8','٨')::replace('9','٩')::replace('Unknown','غير معروفة')} 🎚️⁩\"||\"⁧القنوات: غير معروفة 🎚️⁩\"]}\\n{stream.encode::exists[\"⁧الترميز: {stream.encode::replace('HEVC','إتش إي في سي')::replace('H.265','إتش ٢٦٥')::replace('H265','إتش ٢٦٥')::replace('x265','إكس ٢٦٥')::replace('AVC','إيه في سي')::replace('H.264','إتش ٢٦٤')::replace('H264','إتش ٢٦٤')::replace('x264','إكس ٢٦٤')::replace('AV1','إيه في ون')::replace('VP9','في بي ٩')::replace('VP8','في بي ٨')::replace('MPEG-4','إم بي إي جي ٤')::replace('MPEG-2','إم بي إي جي ٢')::replace('VC-1','في سي ١')::replace('XviD','إكس فيد')::replace('DivX','ديف إكس')::replace('Unknown','غير معروف')} 🎞️⁩\"||\"⁧الترميز: غير معروف 🎞️⁩\"]} | {stream.visualTags::exists[\"⁧الصورة: {stream.visualTags::in('HDR10+','HDR10P','HDR10PLUS')[\"إتش دي آر ١٠ بلس{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"{stream.visualTags::in('HDR10')[\"إتش دي آر ١٠{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"{stream.visualTags::in('HDR')[\"إتش دي آر{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::exists[\"، \"||\"\"]}\"||\"\"]}\"]}\"]}{stream.visualTags::remove('HDR10+','HDR10P','HDR10PLUS','HDR10','HDR')::replace('HDR+DV','إتش دي آر مع دولبي فيجن')::replace('DV Only','دولبي فيجن فقط')::replace('HDR Only','إتش دي آر فقط')::replace('DV','دولبي فيجن')::replace('HLG','إتش إل جي')::replace('10bit','١٠ بت')::replace('10-bit','١٠ بت')::replace('SDR','إس دي آر')::replace('IMAX','آيماكس')::replace('AI','ذكاء اصطناعي')::replace('Upscaled','مرفوعة الدقة')::replace('3D','ثلاثي الأبعاد')::replace('H-OU','ثلاثي الأبعاد نصف علوي وسفلي')::replace('H-SBS','ثلاثي الأبعاد نصف جانبي')::replace('Unknown','غير معروفة')::unique::sort::join('، ')} 📷⁩\"||\"⁧الصورة: غير معروفة 📷⁩\"]}\\n⁧لغة الصوت: {metadata.isAnime::istrue[\"اليابانية 🇯🇵\"||\"{stream.uLanguages::exists[\"{stream.uLanguages::in('arabic')[\"{stream.uLanguages::in('english')[\"العربية 🇸🇦 والإنجليزية 🇺🇸\"||\"العربية 🇸🇦\"]}\"||\"{stream.uLanguages::in('english')[\"الإنجليزية 🇺🇸\"||\"{stream.uLanguages::first::lower::replace('dual audio','غير معروفة ❓')::replace('dual','غير معروفة ❓')::replace('multilingual','متعددة 🌎')::replace('multiple','متعددة 🌎')::replace('multi','متعددة 🌎')::replace('dubbed','مدبلجة')::replace('dub','مدبلجة')::replace('arabic','العربية')::replace('english','الإنجليزية')::replace('japanese','اليابانية')::replace('french','الفرنسية')::replace('spanish','الإسبانية')::replace('german','الألمانية')::replace('italian','الإيطالية')::replace('korean','الكورية')::replace('chinese','الصينية')::replace('turkish','التركية')::replace('dutch','الهولندية')::replace('swedish','السويدية')::replace('norwegian','النرويجية')::replace('danish','الدنماركية')::replace('finnish','الفنلندية')::replace('polish','البولندية')}{stream.uLanguages::first::in('dual','dual audio','multi','multiple','multilingual','dubbed','dub')[\"\"||\" {stream.uLanguages::first::languageEmoji}\"]}\"]}\"]}\"||\"{stream.languages::exists[\"{stream.languages::first::in('multi','multiple','multilingual')[\"متعددة 🌎\"||\"{stream.languages::first::in('dubbed','dub')[\"مدبلجة\"||\"غير معروفة ❓\"]}\"]}\"||\"{metadata.originalLanguage::exists[\"{metadata.originalLanguage::in('english','en')[\"الإنجليزية 🇺🇸\"||\"{metadata.originalLanguage::lower::replace('arabic','العربية')::replace('english','الإنجليزية')::replace('japanese','اليابانية')::replace('french','الفرنسية')::replace('spanish','الإسبانية')::replace('german','الألمانية')::replace('italian','الإيطالية')::replace('korean','الكورية')::replace('chinese','الصينية')::replace('turkish','التركية')::replace('dutch','الهولندية')::replace('swedish','السويدية')::replace('norwegian','النرويجية')::replace('danish','الدنماركية')::replace('finnish','الفنلندية')::replace('polish','البولندية')} {metadata.originalLanguage::languageEmoji}\"]}\"||\"غير معروفة ❓\"]}\"]}\"]}\"]}⁩ | ⁧{stream.subtitles::in('arabic')[\"الترجمة العربية متوفرة ✅\"||\"{stream.subtitles::exists[\"الترجمة العربية غير متوفرة ❌\"||\"{stream.subbed::istrue::and::stream.languages::in('arabic')[\"احتمالية وجود ترجمة عربية ❓\"||\"الترجمة العربية غير متوفرة ❌\"]}\"]}\"]}⁩"
               }
             }
           }
@@ -1660,16 +1684,6 @@
             "enabled": true
           },
           {
-            "__if": "inputs.torboxTier == nonPro",
-            "expression": "/*حد تنزيل توربوكس الأساسي والقياسي*/ folderSize(uncached(service(streams, 'torbox')), '200GB')",
-            "enabled": true
-          },
-          {
-            "__if": "inputs.torboxTier == pro",
-            "expression": "/*حد تنزيل توربوكس برو*/ folderSize(uncached(service(streams, 'torbox')), '1TB')",
-            "enabled": true
-          },
-          {
             "__if": "inputs.coreFilter and inputs.coreFilter != 0",
             "expression": "/*تصفية الديبرد المخزن والتورنت والروابط المباشرة حسب الجودة والدقة*/ (1*{{inputs.coreFilter}}) !=0 ? negate( merge( perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '2160p'), 'quality', (count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '1440p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '1080p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}})) ), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '720p'), 'quality', ((count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '2160p'), 'Bluray Remux', 'Bluray', 'WEB-DL'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '1080p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}} or count(quality(resolution(negate(merge(library(streams), seadex(streams), uncached(streams)), streams), '720p'), 'Bluray Remux', 'Bluray'))<=1*{{inputs.coreFilter}}) ? ceil(1.5*{{inputs.coreFilter}}) : (1*{{inputs.coreFilter}}))), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), '576p', '480p','360p','240p','144p'), 'quality', 1*{{inputs.coreFilter}}), perGroup(resolution(negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams), 'Unknown'), 'quality', 1*{{inputs.coreFilter}})), negate(merge(library(streams), seadex(streams), type(streams,'usenet','stremio-usenet'), uncached(streams)), streams)) : []",
             "enabled": true
@@ -1703,7 +1717,7 @@
             "enabled": true
           },
           {
-            "expression": "/*استبعاد ويب ريب عند توفر جودة أفضل*/ count(   quality(     streams,     'Bluray REMUX',     'Bluray',     'WEB-DL'   ) ) > 0   ? quality(streams, 'WEBRip')   : []",
+            "expression": "/*استبعاد جودة ويب ريب عند توفر جودات افضل*/ count(   quality(     streams,     'Bluray REMUX',     'Bluray',     'WEB-DL'   ) ) > 0   ? quality(streams, 'WEBRip')   : []",
             "enabled": true
           },
           {
@@ -1723,13 +1737,13 @@
           "enabled": true
         },
         {
-          "__if": "inputs.torboxTier == nonPro",
-          "expression": "/*حد تنزيل توربوكس الأساسي والقياسي*/ folderSize(uncached(service(streams, 'torbox')), '200GB')",
+          "__if": "services.torbox and inputs.torboxTier == nonPro",
+          "expression": "/*حد تنزيل توربوكس للملفات الغير مخزنه*/ folderSize(uncached(service(streams, 'torbox')), '200GB')",
           "enabled": true
         },
         {
-          "__if": "inputs.torboxTier == pro",
-          "expression": "/*حد تنزيل توربوكس برو*/ folderSize(uncached(service(streams, 'torbox')), '1TB')",
+          "__if": "services.torbox and inputs.torboxTier == pro",
+          "expression": "/*حد تنزيل توربوكس برو للملفات الغير مخزنه*/ folderSize(uncached(service(streams, 'torbox')), '1TB')",
           "enabled": true
         },
         {
@@ -1770,7 +1784,7 @@
           "enabled": true
         },
         {
-          "expression": "/*استبعاد ويب ريب عند توفر جودة أفضل*/ count(   quality(     streams,     'Bluray REMUX',     'Bluray',     'WEB-DL'   ) ) > 0   ? quality(streams, 'WEBRip')   : []",
+          "expression": "/*استبعاد جودة ويب ريب عند توفر جودات افضل*/ count(   quality(     streams,     'Bluray REMUX',     'Bluray',     'WEB-DL'   ) ) > 0   ? quality(streams, 'WEBRip')   : []",
           "enabled": true
         }
       ]
