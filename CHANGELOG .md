@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.5 (2026-10-03)
+
+New
+
+- Added an optional NZBatlas protection setting for Usenet services other than TorBox. Enabled by default, it preserves the first two NZBatlas results.
+
+Changes
+
+- Reordered P2P and HTTP addons: STorz, PenguPlay, HdHub, Sootio, Meteor, Comet, OpenSubtitles V3+, SubDL, and SubSource.
+- Enabled Include AI Translated subtitles and Movie Hash + Auto Adjustment for OpenSubtitles V3+ in the P2P profile.
+- Removed TorBox download limits from the P2P profile. Limits now apply only when TorBox is selected.
+- Updated the Arabic formatter to show the series name, season, and episode number without the episode title.
+- Updated the Arabic formatter to show only the highest audio channel value.
+- Updated Arabic quality labels for DVDRip and Remux.
+- Updated formatter and addon option labels, Stream Expression comments, and the result count description to clarify that Usenet results have separate limits.
+
 ## 1.0.4 (2026-10-02)
 
 Changes
