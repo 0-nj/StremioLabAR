@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.6 (2026-10-05)
+
+New
+
+- Enabled RemuxDB Integration.
+
+Changes
+
+- Updated the English formatter.
+- Fixed the missing separator after the original-language label.
+- Simplified unknown subtitles to display SUB (🏳️).
+- Updated the Tamtaro formatter to its latest Default preset.
+
 ## 1.0.5 (2026-10-03)
 
 New
