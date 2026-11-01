@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.0.7 (2026-10-31)
+
+New
+
+- Added an Arabic Digital Release Filter dropdown (Yes/No), enabled by default for movies.
+- Included English, Arabic, Tamtaro, and Jellyfin formatters in Saved when importing a formatter, for quick switching without rerunning the template.
+
+Changes
+
+- Updated the TorBox health check to treat degraded service as down.
+- Updated the TorBox outage fallback to disable TorBox and remove it from addon service selections, then enable HdHub and PenguPlay.
+
 ## 1.0.6 (2026-10-05)
 
 New
