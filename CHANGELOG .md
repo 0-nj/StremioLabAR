@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.0.8 (2026-11-01)
+
+New
+
+- Added the Arabic & English formatter as "انقليزي معرب", including a Saved entry for quick switching.
+- Added Meteor directly below STorz in the Debrid/Usenet addon preset, with a 5000 ms timeout and P2P disabled.
+
+Changes
+
+- Updated the English formatter to fix stray separators, subtitle labels, and empty audio/video icons while keeping the metadata language fallback.
+- Replaced the TMDB access-token credential prompt with a TMDB API-key prompt.
+- Removed the TVDB credential prompt.
+- Included Meteor in the Debrid/Usenet fast-search completion checks.
+
 ## 1.0.7 (2026-10-31)
 
 New
